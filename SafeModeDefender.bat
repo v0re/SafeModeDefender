@@ -2,6 +2,32 @@
 chcp 65001 >nul
 setlocal enabledelayedexpansion
 
+:: 解析命令列參數
+set CLI_MODE=0
+set CLI_ACTION=
+set CLI_CATEGORY=
+set CLI_MODULE=
+set CLI_TOOL=
+set CLI_CONFIG=
+set CLI_SILENT=0
+set CLI_AUTOFIX=0
+
+:PARSE_ARGS
+if "%~1"=="" goto END_PARSE_ARGS
+if /i "%~1"=="--cli" set CLI_MODE=1
+if /i "%~1"=="--action" set CLI_ACTION=%~2& shift
+if /i "%~1"=="--category" set CLI_CATEGORY=%~2& shift
+if /i "%~1"=="--module" set CLI_MODULE=%~2& shift
+if /i "%~1"=="--tool" set CLI_TOOL=%~2& shift
+if /i "%~1"=="--config" set CLI_CONFIG=%~2& shift
+if /i "%~1"=="--silent" set CLI_SILENT=1
+if /i "%~1"=="--autofix" set CLI_AUTOFIX=1
+if /i "%~1"=="--help" goto SHOW_CLI_HELP
+shift
+goto PARSE_ARGS
+
+:END_PARSE_ARGS
+
 :: ============================================================================
 :: SafeModeDefender v2.0 - Windows 安全模式深度清理工具
 :: 
@@ -89,6 +115,9 @@ echo ═════════════════════════
 echo.
 pause
 
+:: 如果是命令列模式，跳過選單
+if %CLI_MODE% equ 1 goto CLI_HANDLER
+
 :MAIN_MENU
 cls
 echo ╔══════════════════════════════════════════════════════════════════════════╗
@@ -105,6 +134,7 @@ echo   [G] 系統完整性與更新（3 個模塊）
 echo   [H] 環境變數與 Hosts（2 個模塊）
 echo   [I] 防火牆與策略（3 個模塊）
 echo.
+echo   [T] 外部工具管理器
 echo   [X] 執行完整掃描（所有 33 個模塊）
 echo   [R] 查看報告
 echo   [Q] 退出
@@ -122,6 +152,7 @@ if /i "%CHOICE%"=="F" goto MENU_F
 if /i "%CHOICE%"=="G" goto MENU_G
 if /i "%CHOICE%"=="H" goto MENU_H
 if /i "%CHOICE%"=="I" goto MENU_I
+if /i "%CHOICE%"=="T" goto EXTERNAL_TOOLS
 if /i "%CHOICE%"=="X" goto RUN_FULL_SCAN
 if /i "%CHOICE%"=="R" goto VIEW_REPORTS
 if /i "%CHOICE%"=="Q" goto EXIT
@@ -279,3 +310,28 @@ echo ═════════════════════════
 echo.
 timeout /t 3
 exit /b 0
+
+:SHOW_CLI_HELP
+powershell -ExecutionPolicy Bypass -File "%~dp0Core\CLI_Handler.ps1" -Help
+exit /b 0
+
+:CLI_HANDLER
+if defined CLI_TOOL (
+    powershell -ExecutionPolicy Bypass -File "%~dp0Core\External_Tools_Manager.ps1" -Tool "%CLI_TOOL%" -Action "%CLI_ACTION%" -CLI
+) else (
+    powershell -ExecutionPolicy Bypass -File "%~dp0Core\CLI_Handler.ps1" -Action "%CLI_ACTION%" -Category "%CLI_CATEGORY%" -Module "%CLI_MODULE%" -ConfigFile "%CLI_CONFIG%"
+)
+exit /b %errorlevel%
+
+:EXTERNAL_TOOLS
+cls
+echo ╔══════════════════════════════════════════════════════════════════════════╗
+echo ║                      外部工具管理器                                      ║
+echo ╚══════════════════════════════════════════════════════════════════════════╝
+echo.
+echo 正在啟動外部工具管理器...
+echo.
+powershell -ExecutionPolicy Bypass -File "%~dp0Core\External_Tools_Manager.ps1"
+echo.
+pause
+goto MAIN_MENU

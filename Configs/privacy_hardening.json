@@ -1,0 +1,28 @@
+{
+  "name": "隱私強化套件",
+  "description": "使用內建模塊和外部工具進行全面的隱私保護和遙測禁用",
+  "tasks": [
+    {
+      "type": "scan",
+      "category": "F",
+      "description": "執行內建隱私權與遙測掃描"
+    },
+    {
+      "type": "tool",
+      "tool": "optimizer",
+      "action": "privacy",
+      "description": "使用 Optimizer 進行隱私優化"
+    },
+    {
+      "type": "scan",
+      "category": "A",
+      "description": "檢查網路服務和端口安全"
+    },
+    {
+      "type": "tool",
+      "tool": "simplewall",
+      "action": "gui",
+      "description": "使用 simplewall 管理防火牆規則"
+    }
+  ]
+}

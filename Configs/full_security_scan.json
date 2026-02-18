@@ -1,0 +1,51 @@
+{
+  "name": "完整安全掃描",
+  "description": "執行所有 SafeModeDefender 內建模塊的完整掃描",
+  "tasks": [
+    {
+      "type": "scan",
+      "category": "A",
+      "description": "網路服務與端口安全"
+    },
+    {
+      "type": "scan",
+      "category": "B",
+      "description": "系統權限與提權防護"
+    },
+    {
+      "type": "scan",
+      "category": "C",
+      "description": "註冊表與持久化防護"
+    },
+    {
+      "type": "scan",
+      "category": "D",
+      "description": "檔案系統與隱藏威脅"
+    },
+    {
+      "type": "scan",
+      "category": "E",
+      "description": "記憶體與漏洞防護"
+    },
+    {
+      "type": "scan",
+      "category": "F",
+      "description": "隱私權與遙測"
+    },
+    {
+      "type": "scan",
+      "category": "G",
+      "description": "系統完整性與更新"
+    },
+    {
+      "type": "scan",
+      "category": "H",
+      "description": "環境變數與 Hosts"
+    },
+    {
+      "type": "scan",
+      "category": "I",
+      "description": "防火牆與策略"
+    }
+  ]
+}
