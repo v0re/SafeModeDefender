@@ -1,0 +1,360 @@
+﻿<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>
+EXTERNAL_TOOLS_PLAN
+</title>
+    <style>
+        body {
+            font-family: "Microsoft JhengHei", "微軟正黑體", Arial, sans-serif;
+            line-height: 1.6;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        h1 { color: #2c3e50; border-bottom: 3px solid #3498db; padding-bottom: 10px; }
+        h2 { color: #34495e; border-bottom: 2px solid #95a5a6; padding-bottom: 8px; margin-top: 30px; }
+        h3 { color: #7f8c8d; margin-top: 20px; }
+        code {
+            background-color: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: "Consolas", "Courier New", monospace;
+        }
+        pre {
+            background-color: #2c3e50;
+            color: #ecf0f1;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+        pre code {
+            background-color: transparent;
+            color: #ecf0f1;
+            padding: 0;
+        }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin: 20px 0;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        th {
+            background-color: #3498db;
+            color: white;
+        }
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        a {
+            color: #3498db;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        blockquote {
+            border-left: 4px solid #3498db;
+            padding-left: 20px;
+            margin: 20px 0;
+            color: #7f8c8d;
+            background-color: #f8f9fa;
+            padding: 10px 20px;
+        }
+        ul, ol {
+            margin: 15px 0;
+            padding-left: 30px;
+        }
+        li {
+            margin: 8px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+<p>﻿# SafeModeDefender 外部工具整合計畫</p>
+
+<h2>概述</h2>
+
+<p>本文檔列出了經過篩選的優質開源安全工具，這些工具將被整合到 SafeModeDefender 中，並提供統一的中文化雙模式介面（GUI 交互式選單 + CLI 命令列）。</p>
+
+<h2>工具篩選標準</h2>
+
+<ol>
+<li><strong>GitHub 星級</strong> > 500（成熟度指標）</li>
+<li><strong>支援 Windows 平台</strong></li>
+<li><strong>優先支援安全模式運行</strong></li>
+<li><strong>提供 CLI 或可自動化執行</strong></li>
+<li><strong>活躍維護</strong>（近期有更新）</li>
+<li><strong>開源授權</strong>（MIT、GPL 等）</li>
+</ol>
+
+<h2>精選工具清單（按類別）</h2>
+
+<h3>類別 A：惡意軟體檢測與移除</h3>
+
+<p>| 工具名稱 | GitHub URL | 星級 | 安全模式 | 核心功能 |
+|---------|-----------|------|---------|---------|
+| <strong>ClamAV</strong> | https://github.com/Cisco-Talos/clamav | 6,256 | ✓ | 開源跨平台防毒引擎，檢測木馬、病毒、惡意軟體 |
+| <strong>Chainsaw</strong> | https://github.com/WithSecureLabs/chainsaw | 3,443 | ✓ | Windows 事件日誌鑑識工具，支援 Sigma 規則 |
+| <strong>Harden-Windows-Security</strong> | https://github.com/HotCakeX/Harden-Windows-Security | 4,136 | ✓ | PowerShell 安全強化腳本，多級別防護 |</p>
+
+<h3>類別 B：註冊表清理與修復</h3>
+
+<p>| 工具名稱 | GitHub URL | 星級 | 安全模式 | 核心功能 |
+|---------|-----------|------|---------|---------|
+| <strong>WinUtil</strong> | https://github.com/ChrisTitusTech/winutil | 47,598 | ✓ | 全能 Windows 工具，系統優化、修復、調整 |
+| <strong>Optimizer</strong> | https://github.com/hellzerg/optimizer | 18,028 | ✓ | 隱私和安全增強工具，修復註冊表問題 |</p>
+
+<h3>類別 C：磁碟分區恢復與資料救援</h3>
+
+<p>| 工具名稱 | GitHub URL | 星級 | 安全模式 | 核心功能 |
+|---------|-----------|------|---------|---------|
+| <strong>TestDisk</strong> | https://github.com/cgsecurity/testdisk | 2,300 | ✓ | 磁碟分區恢復、引導扇區修復 |
+| <strong>PhotoRec</strong> | https://github.com/cgsecurity/testdisk | 2,300 | ✓ | 檔案資料恢復（480+ 檔案格式） |
+| <strong>Digler</strong> | https://github.com/ostafen/digler | 1,100 | ? | 取證磁碟分析和檔案恢復 |</p>
+
+<h3>類別 D：網路診斷與修復</h3>
+
+<p>| 工具名稱 | GitHub URL | 星級 | 安全模式 | 核心功能 |
+|---------|-----------|------|---------|---------|
+| <strong>NETworkManager</strong> | https://github.com/BornToBeRoot/NETworkManager | 8,000 | ✗ | 網路管理和故障排除統一介面 |
+| <strong>Sniffnet</strong> | https://github.com/GyulyVGC/sniffnet | 32,800 | ✗ | 跨平台網路流量監控 |</p>
+
+<h3>類別 E：系統完整性檢查</h3>
+
+<p>| 工具名稱 | GitHub URL | 星級 | 安全模式 | 核心功能 |
+|---------|-----------|------|---------|---------|
+| <strong>WinUtil</strong> | https://github.com/ChrisTitusTech/winutil | 47,600 | ✓ | 整合 SFC 和 DISM 功能 |
+| <strong>Windows-Maintenance-Tool</strong> | https://github.com/ios12checker/Windows-Maintenance-Tool | 1,100 | ✓ | Batch + PowerShell 維護工具包 |</p>
+
+<h3>類別 F：隱私保護與遙測禁用</h3>
+
+<p>| 工具名稱 | GitHub URL | 星級 | 安全模式 | 核心功能 |
+|---------|-----------|------|---------|---------|
+| <strong>privacy.sexy</strong> | https://github.com/undergroundwires/privacy.sexy | 5,400 | ? | 隱私和安全最佳實踐腳本生成器 |
+| <strong>WindowsSpyBlocker</strong> | https://github.com/crazy-max/WindowsSpyBlocker | 5,100 | ? | 阻止 Windows 間諜活動和跟踪 |</p>
+
+<h3>類別 G：防火牆與端口管理</h3>
+
+<p>| 工具名稱 | GitHub URL | 星級 | 安全模式 | 核心功能 |
+|---------|-----------|------|---------|---------|
+| <strong>simplewall</strong> | https://github.com/henrypp/simplewall | 8,000 | ✓ | Windows 過濾平台 (WFP) 管理工具 |
+| <strong>WindowsFirewallRuleset</strong> | https://github.com/metablaster/WindowsFirewallRuleset | 177 | ✓ | PowerShell 防火牆規則自動化配置 |</p>
+
+<h3>類別 H：權限提升檢測</h3>
+
+<p>| 工具名稱 | GitHub URL | 星級 | 安全模式 | 核心功能 |
+|---------|-----------|------|---------|---------|
+| <strong>PrivescCheck</strong> | https://github.com/itm4n/PrivescCheck | 3,700 | ? | PowerShell 權限提升漏洞檢測 |
+| <strong>windows-privesc-check</strong> | https://github.com/pentestmonkey/windows-privesc-check | 1,500 | ? | 獨立可執行文件，檢查提權向量 |
+| <strong>Windows-Exploit-Suggester</strong> | https://github.com/AonCyberLabs/Windows-Exploit-Suggester | 2,900 | ? | Python 腳本，比對系統補丁與漏洞 |</p>
+
+<h3>類別 I：記憶體分析與漏洞檢測</h3>
+
+<p>| 工具名稱 | GitHub URL | 星級 | 安全模式 | 核心功能 |
+|---------|-----------|------|---------|---------|
+| <strong>Volatility Framework</strong> | https://github.com/volatilityfoundation/volatility | 8,000 | ✗ | 開源記憶體取證框架 |
+| <strong>CVE Binary Tool</strong> | https://github.com/ossf/cve-bin-tool | 1,600 | ✓ | 掃描軟體中的已知漏洞 |
+| <strong>MemProcFS-Analyzer</strong> | https://github.com/LETHAL-FORENSICS/MemProcFS-Analyzer | 694 | ? | PowerShell 記憶體轉儲分析 |</p>
+
+<h3>類別 J：系統優化與垃圾清理</h3>
+
+<p>| 工具名稱 | GitHub URL | 星級 | 安全模式 | 核心功能 |
+|---------|-----------|------|---------|---------|
+| <strong>WinUtil</strong> | https://github.com/ChrisTitusTech/winutil | 47,600 | ✓ | 系統優化、調整、修復 |
+| <strong>AtlasOS</strong> | https://github.com/Atlas-OS/Atlas | 19,800 | ? | 透過 Playbooks 優化 Windows 效能和隱私 |
+| <strong>BleachBit</strong> | https://github.com/bleachbit/bleachbit | 4,400 | ? | 系統清理工具，釋放磁碟空間 |</p>
+
+<h2>優先整合工具（第一階段）</h2>
+
+<p>基於安全模式支援、星級和功能覆蓋，以下工具將優先整合：</p>
+
+<h3>🔥 高優先級（必須整合）</h3>
+
+<ol>
+<li><strong>WinUtil</strong> (47,600 ⭐) - 全能工具，涵蓋多個類別</li>
+<li><strong>Optimizer</strong> (18,028 ⭐) - 隱私和安全增強</li>
+<li><strong>TestDisk + PhotoRec</strong> (2,300 ⭐) - 磁碟修復和資料恢復</li>
+<li><strong>simplewall</strong> (8,000 ⭐) - 防火牆管理</li>
+<li><strong>ClamAV</strong> (6,256 ⭐) - 防毒掃描</li>
+<li><strong>Chainsaw</strong> (3,443 ⭐) - 事件日誌分析</li>
+<li><strong>PrivescCheck</strong> (3,700 ⭐) - 權限提升檢測</li>
+</ol>
+
+<h3>⚡ 中優先級（建議整合）</h3>
+
+<ol>
+<li><strong>Harden-Windows-Security</strong> (4,136 ⭐) - 安全強化</li>
+<li><strong>privacy.sexy</strong> (5,400 ⭐) - 隱私腳本生成</li>
+<li><strong>WindowsSpyBlocker</strong> (5,100 ⭐) - 遙測阻止</li>
+<li><strong>NETworkManager</strong> (8,000 ⭐) - 網路診斷</li>
+<li><strong>BleachBit</strong> (4,400 ⭐) - 系統清理</li>
+</ol>
+
+<h3>💡 低優先級（可選整合）</h3>
+
+<ol>
+<li><strong>AtlasOS</strong> (19,800 ⭐) - 系統優化（但可能過於激進）</li>
+<li><strong>Volatility</strong> (8,000 ⭐) - 記憶體分析（進階用戶）</li>
+<li><strong>CVE Binary Tool</strong> (1,600 ⭐) - 漏洞掃描</li>
+</ol>
+
+<h2>整合方式</h2>
+
+<h3>1. 自動下載與安裝</h3>
+
+<ul>
+<li>工具首次使用時自動從 GitHub Releases 下載</li>
+<li>儲存到 <code>SafeModeDefender\Tools\{tool_name}\</code> 目錄</li>
+<li>驗證檔案完整性（SHA256）</li>
+</ul>
+
+<h3>2. 中文化封裝</h3>
+
+<p>每個工具提供：
+- <strong>中文選單介面</strong>：翻譯所有選項和說明
+- <strong>預設配置</strong>：針對 APT 攻擊場景優化參數
+- <strong>執行前提示</strong>：說明工具功能和風險
+- <strong>執行後報告</strong>：整合結果到 SafeModeDefender 報告系統</p>
+
+<h3>3. 雙模式支援</h3>
+
+<p><strong>GUI 模式（交互式選單）</strong>：
+```
+╔══════════════════════════════════════════════════════════════════════════╗
+║                      外部工具：TestDisk                                  ║
+╚══════════════════════════════════════════════════════════════════════════╝</p>
+
+<p>[1] 恢復丟失的分區
+  [2] 修復引導扇區
+  [3] 恢復已刪除的檔案 (PhotoRec)
+  [4] 進階模式（直接啟動 TestDisk）
+  [B] 返回
+```</p>
+
+<p><strong>CLI 模式（命令列）</strong>：
+```bash</p>
+
+<h1>使用外部工具</h1>
+
+<p>SafeModeDefender.bat --cli --tool testdisk --action recover</p>
+
+<h1>靜默模式自動執行</h1>
+
+<p>SafeModeDefender.bat --cli --tool optimizer --action privacy --silent --autofix
+```</p>
+
+<h3>4. 配置檔批次執行</h3>
+
+<p>支援 JSON 配置檔，一次執行多個工具：</p>
+
+<p><code>json
+{
+  "tasks": [
+    {
+      "tool": "clamav",
+      "action": "scan",
+      "target": "C:\\",
+      "autofix": false
+    },
+    {
+      "tool": "optimizer",
+      "action": "privacy",
+      "autofix": true
+    },
+    {
+      "tool": "privesccheck",
+      "action": "audit",
+      "report": true
+    }
+  ]
+}
+</code></p>
+
+<p>執行：
+<code>bash
+SafeModeDefender.bat --cli --config security_audit.json
+</code></p>
+
+<h2>技術實現</h2>
+
+<h3>目錄結構</h3>
+
+<p><code>
+SafeModeDefender_v2/
+├── SafeModeDefender.bat          # 主啟動器（已更新支援 CLI）
+├── Core/
+│   ├── CLI_Handler.ps1           # 命令列參數處理
+│   ├── External_Tools_Manager.ps1 # 外部工具管理器
+│   └── Tool_Wrappers/            # 各工具的中文化封裝腳本
+│       ├── WinUtil_Wrapper.ps1
+│       ├── Optimizer_Wrapper.ps1
+│       ├── TestDisk_Wrapper.ps1
+│       ├── ClamAV_Wrapper.ps1
+│       └── ...
+├── Tools/                        # 外部工具安裝目錄（自動下載）
+│   ├── winutil/
+│   ├── optimizer/
+│   ├── testdisk/
+│   └── ...
+└── Configs/                      # 配置檔範例
+    ├── full_security_scan.json
+    ├── privacy_hardening.json
+    └── malware_removal.json
+</code></p>
+
+<h3>工具封裝腳本範例</h3>
+
+<p>每個工具的 Wrapper 腳本應包含：</p>
+
+<ol>
+<li><strong>下載函數</strong>：<code>Download-Tool</code></li>
+<li><strong>安裝函數</strong>：<code>Install-Tool</code></li>
+<li><strong>驗證函數</strong>：<code>Verify-Tool</code></li>
+<li><strong>執行函數</strong>：<code>Invoke-Tool</code></li>
+<li><strong>中文選單</strong>：<code>Show-Menu</code></li>
+<li><strong>結果解析</strong>：<code>Parse-Result</code></li>
+</ol>
+
+<h2>授權與致謝</h2>
+
+<p>所有整合的外部工具均保留其原始授權和版權聲明。SafeModeDefender 僅提供統一的介面和自動化封裝，不修改工具本身的程式碼。</p>
+
+<p>每個工具在使用時都會顯示：
+- 工具名稱和版本
+- GitHub 儲存庫 URL
+- 原始作者和授權資訊
+- 鼓勵使用者給原專案 Star</p>
+
+<h2>下一步行動</h2>
+
+<ol>
+<li>✅ 完成工具搜尋和評估</li>
+<li>🔄 開發工具整合框架</li>
+<li>🔄 創建高優先級工具的封裝腳本</li>
+<li>⏳ 測試所有工具在安全模式下的運行</li>
+<li>⏳ 撰寫完整的使用文檔</li>
+<li>⏳ 更新 GitHub 儲存庫</li>
+</ol>
+
+<hr />
+
+<p><strong>更新日期</strong>：2026-02-19 <br />
+<strong>版本</strong>：v2.1 (External Tools Integration)</p>
+    </div>
+</body>
+</html>

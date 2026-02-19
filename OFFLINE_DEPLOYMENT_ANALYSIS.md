@@ -1,4 +1,4 @@
-# SafeModeDefender 工具離線運作能力分析
+﻿# SafeModeDefender 工具離線運作能力分析
 
 **文檔版本**：1.0  
 **分析日期**：2026-02-19  

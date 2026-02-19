@@ -1,4 +1,4 @@
-{
+﻿{
   "name": "完整安全掃描",
   "description": "執行所有 SafeModeDefender 內建模塊的完整掃描",
   "tasks": [

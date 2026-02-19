@@ -1,0 +1,217 @@
+﻿<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>
+SYNTAX_FIX_NOTES
+</title>
+    <style>
+        body {
+            font-family: "Microsoft JhengHei", "微軟正黑體", Arial, sans-serif;
+            line-height: 1.6;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        h1 { color: #2c3e50; border-bottom: 3px solid #3498db; padding-bottom: 10px; }
+        h2 { color: #34495e; border-bottom: 2px solid #95a5a6; padding-bottom: 8px; margin-top: 30px; }
+        h3 { color: #7f8c8d; margin-top: 20px; }
+        code {
+            background-color: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: "Consolas", "Courier New", monospace;
+        }
+        pre {
+            background-color: #2c3e50;
+            color: #ecf0f1;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+        pre code {
+            background-color: transparent;
+            color: #ecf0f1;
+            padding: 0;
+        }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin: 20px 0;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        th {
+            background-color: #3498db;
+            color: white;
+        }
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        a {
+            color: #3498db;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        blockquote {
+            border-left: 4px solid #3498db;
+            padding-left: 20px;
+            margin: 20px 0;
+            color: #7f8c8d;
+            background-color: #f8f9fa;
+            padding: 10px 20px;
+        }
+        ul, ol {
+            margin: 15px 0;
+            padding-left: 30px;
+        }
+        li {
+            margin: 8px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+<p>﻿# PowerShell 語法錯誤修復說明</p>
+
+<p><strong>修復日期</strong>：2026-02-19 <br />
+<strong>問題來源</strong>：使用者回報 <code>WinUtil_Wrapper.ps1</code> 執行時出現語法錯誤</p>
+
+<hr />
+
+<h2>問題分析</h2>
+
+<h3>錯誤截圖顯示的問題</h3>
+
+<p>根據使用者提供的截圖，主要錯誤集中在 <code>WinUtil_Wrapper.ps1</code> 的以下位置：</p>
+
+<ol>
+<li><strong>第 46 行</strong>：<code>Unexpected token '????' in expression or statement</code></li>
+<li><strong>第 52、73、77、86 行</strong>：<code>Array index expression is missing or not valid</code></li>
+<li><strong>第 195、191 行</strong>：<code>Missing closing '}' in statement block or type definition</code></li>
+<li><strong>第 203 行</strong>：<code>switch</code> 語句相關錯誤</li>
+</ol>
+
+<h3>根本原因</h3>
+
+<p>問題的根本原因是在 PowerShell 的 <code>Write-Host</code> 命令中使用了<strong>嵌套的條件表達式</strong>作為 <code>-ForegroundColor</code> 參數的值。</p>
+
+<p><strong>錯誤的寫法</strong>（第 47 行）：
+<code>powershell
+Write-Host "  安全模式支援：$(if ($ToolInfo.SafeModeSupport) { '✓ 是' } else { '✗ 否' })" -ForegroundColor $(if ($ToolInfo.SafeModeSupport) { 'Green' } else { 'Red' })
+</code></p>
+
+<p>這種寫法在某些 PowerShell 版本中會導致解析錯誤，因為：
+- PowerShell 解析器在處理嵌套的 <code>$()</code> 表達式時可能會混淆
+- <code>-ForegroundColor</code> 參數期望一個簡單的值，而不是複雜的條件表達式</p>
+
+<hr />
+
+<h2>修復方案</h2>
+
+<h3>修復方法</h3>
+
+<p>將嵌套的條件表達式拆分為獨立的變數賦值，然後再使用這些變數。</p>
+
+<p><strong>修復後的寫法</strong>：
+<code>powershell
+$safeModeText = if ($ToolInfo.SafeModeSupport) { '✓ 是' } else { '✗ 否' }
+$safeModeColor = if ($ToolInfo.SafeModeSupport) { 'Green' } else { 'Red' }
+Write-Host "  安全模式支援：$safeModeText" -ForegroundColor $safeModeColor
+</code></p>
+
+<h3>優點</h3>
+
+<ol>
+<li><strong>可讀性更好</strong>：程式碼更清晰，易於理解和維護</li>
+<li><strong>相容性更強</strong>：避免了 PowerShell 解析器的潛在問題</li>
+<li><strong>除錯更容易</strong>：可以單獨檢查每個變數的值</li>
+</ol>
+
+<hr />
+
+<h2>修復的檔案</h2>
+
+<h3>1. <code>WinUtil_Wrapper.ps1</code></h3>
+
+<p><strong>位置</strong>：<code>Core/Tool_Wrappers/WinUtil_Wrapper.ps1</code> <br />
+<strong>修改行數</strong>：第 47-49 行</p>
+
+<p><strong>修改前</strong>：
+<code>powershell
+Write-Host "  安全模式支援：$(if ($ToolInfo.SafeModeSupport) { '✓ 是' } else { '✗ 否' })" -ForegroundColor $(if ($ToolInfo.SafeModeSupport) { 'Green' } else { 'Red' })
+</code></p>
+
+<p><strong>修改後</strong>：
+<code>powershell
+$safeModeText = if ($ToolInfo.SafeModeSupport) { '✓ 是' } else { '✗ 否' }
+$safeModeColor = if ($ToolInfo.SafeModeSupport) { 'Green' } else { 'Red' }
+Write-Host "  安全模式支援：$safeModeText" -ForegroundColor $safeModeColor
+</code></p>
+
+<hr />
+
+<h2>測試結果</h2>
+
+<h3>語法檢查</h3>
+
+<p>所有 Wrapper 腳本已通過基本語法檢查：</p>
+
+<p>| 檔案 | 狀態 | 備註 |
+|------|------|------|
+| <code>ClamAV_Wrapper.ps1</code> | ✓ 通過 | 無嵌套條件表達式 |
+| <code>Optimizer_Wrapper.ps1</code> | ✓ 通過 | 無嵌套條件表達式 |
+| <code>TestDisk_Wrapper.ps1</code> | ✓ 通過 | 無嵌套條件表達式 |
+| <code>WinUtil_Wrapper.ps1</code> | ✓ 通過 | <strong>已修復</strong> |</p>
+
+<h3>檢查項目</h3>
+
+<ul>
+<li>✓ 括號配對檢查（大括號、小括號、方括號）</li>
+<li>✓ 嵌套條件表達式檢查</li>
+<li>✓ 基本語法結構檢查</li>
+</ul>
+
+<hr />
+
+<h2>預防措施</h2>
+
+<p>為了避免未來出現類似問題，建議：</p>
+
+<ol>
+<li><strong>避免嵌套條件表達式</strong>：特別是在參數值中</li>
+<li><strong>使用中間變數</strong>：將複雜的表達式拆分為多個步驟</li>
+<li><strong>定期測試</strong>：在不同版本的 PowerShell 中測試腳本</li>
+<li><strong>程式碼審查</strong>：在提交前檢查是否有類似的模式</li>
+</ol>
+
+<hr />
+
+<h2>相關資源</h2>
+
+<ul>
+<li><a href="https://docs.microsoft.com/en-us/powershell/scripting/developer/cmdlet/cmdlet-development-guidelines">PowerShell 最佳實踐</a></li>
+<li><a href="https://docs.microsoft.com/en-us/powershell/scripting/lang-spec/chapter-07">PowerShell 語法參考</a></li>
+</ul>
+
+<hr />
+
+<p><strong>修復狀態</strong>：✓ 已完成 <br />
+<strong>提交版本</strong>：9c15211 <br />
+<strong>提交訊息</strong>：<code>fix: Resolve PowerShell syntax errors in WinUtil_Wrapper and add offline support</code></p>
+    </div>
+</body>
+</html>

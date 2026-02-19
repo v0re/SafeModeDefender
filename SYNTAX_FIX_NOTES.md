@@ -1,4 +1,4 @@
-# PowerShell 語法錯誤修復說明
+﻿# PowerShell 語法錯誤修復說明
 
 **修復日期**：2026-02-19  
 **問題來源**：使用者回報 `WinUtil_Wrapper.ps1` 執行時出現語法錯誤

@@ -1,0 +1,4 @@
+
+# External Tools (downloaded by Download_All_Tools.ps1)
+External_Tools/*.zip
+External_Tools/*.exe

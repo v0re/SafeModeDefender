@@ -1,4 +1,4 @@
-# SafeModeDefender v2.1 - 專業級 Windows 安全模式深度清理與修復工具
+﻿# SafeModeDefender v2.1 - 專業級 Windows 安全模式深度清理與修復工具
 
 **版本：2.1**  
 **作者：Manus AI & v0re**  

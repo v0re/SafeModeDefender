@@ -1,0 +1,433 @@
+﻿<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>
+TESTING_GUIDE
+</title>
+    <style>
+        body {
+            font-family: "Microsoft JhengHei", "微軟正黑體", Arial, sans-serif;
+            line-height: 1.6;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        h1 { color: #2c3e50; border-bottom: 3px solid #3498db; padding-bottom: 10px; }
+        h2 { color: #34495e; border-bottom: 2px solid #95a5a6; padding-bottom: 8px; margin-top: 30px; }
+        h3 { color: #7f8c8d; margin-top: 20px; }
+        code {
+            background-color: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: "Consolas", "Courier New", monospace;
+        }
+        pre {
+            background-color: #2c3e50;
+            color: #ecf0f1;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+        pre code {
+            background-color: transparent;
+            color: #ecf0f1;
+            padding: 0;
+        }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin: 20px 0;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        th {
+            background-color: #3498db;
+            color: white;
+        }
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        a {
+            color: #3498db;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        blockquote {
+            border-left: 4px solid #3498db;
+            padding-left: 20px;
+            margin: 20px 0;
+            color: #7f8c8d;
+            background-color: #f8f9fa;
+            padding: 10px 20px;
+        }
+        ul, ol {
+            margin: 15px 0;
+            padding-left: 30px;
+        }
+        li {
+            margin: 8px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+<p>﻿# AnyDesk 目錄佔位防禦測試指南</p>
+
+<h2>測試目的</h2>
+
+<p>驗證「目錄佔位防禦」策略的有效性，確定 AnyDesk 在配置目錄不可用時的實際行為。</p>
+
+<h2>測試環境要求</h2>
+
+<h3>必要條件</h3>
+
+<ul>
+<li>✅ Windows 虛擬機（建議使用 VMware 或 VirtualBox）</li>
+<li>✅ 乾淨的 Windows 10/11 安裝</li>
+<li>✅ 管理員權限</li>
+<li>✅ 網路連接（用於下載 AnyDesk）</li>
+<li>✅ 快照功能（用於快速恢復測試環境）</li>
+</ul>
+
+<h3>建議配置</h3>
+
+<ul>
+<li>CPU：2 核心</li>
+<li>RAM：4GB</li>
+<li>硬碟：40GB</li>
+</ul>
+
+<h2>測試前準備</h2>
+
+<h3>1. 創建虛擬機快照</h3>
+
+<p>在開始測試前，創建一個乾淨的系統快照，以便在測試後快速恢復。</p>
+
+<p>```powershell</p>
+
+<h1>在 VMware 中，使用 GUI 創建快照</h1>
+
+<h1>快照名稱：Clean<em>System</em>Before<em>AnyDesk</em>Test</h1>
+
+<p>```</p>
+
+<h3>2. 下載 AnyDesk</h3>
+
+<p>從官方網站下載最新版本的 AnyDesk：
+- 官方網站：https://anydesk.com/en/downloads/windows
+- 下載便攜版（Portable）和安裝版（Installer）</p>
+
+<h3>3. 準備測試腳本</h3>
+
+<p>將 <code>Directory_Placeholder_Defense.ps1</code> 複製到虛擬機中。</p>
+
+<h2>測試案例</h2>
+
+<h3>測試案例 1：Block 模式（完全阻止）</h3>
+
+<p><strong>目標</strong>：驗證 AnyDesk 在配置目錄完全不可訪問時的行為。</p>
+
+<p><strong>步驟</strong>：</p>
+
+<ol>
+<li><p><strong>執行防禦腳本</strong>（測試模式）：
+<code>powershell
+.\Directory_Placeholder_Defense.ps1 -Mode Block -Test
+</code>
+檢查輸出，確認將要執行的操作。</p></li>
+<li><p><strong>執行防禦腳本</strong>（實際執行）：
+<code>powershell
+.\Directory_Placeholder_Defense.ps1 -Mode Block
+</code></p></li>
+<li><p><strong>驗證佔位目錄</strong>：
+```powershell</p>
+
+<h1>檢查目錄是否存在</h1>
+
+<p>Test-Path "$env:APPDATA\AnyDesk"
+Test-Path "$env:ProgramData\AnyDesk"</p>
+
+<h1>檢查目錄權限</h1>
+
+<p>Get-Acl "$env:APPDATA\AnyDesk" | Format-List
+```</p></li>
+<li><p><strong>嘗試啟動 AnyDesk（便攜版）</strong>：</p>
+
+<ul>
+<li>雙擊 <code>AnyDesk.exe</code></li>
+<li>觀察是否能正常啟動</li>
+<li>記錄任何錯誤訊息</li>
+</ul></li>
+<li><p><strong>檢查事件日誌</strong>：
+```powershell</p>
+
+<h1>檢查應用程式日誌</h1>
+
+<p>Get-EventLog -LogName Application -Source "AnyDesk*" -Newest 10</p>
+
+<h1>檢查系統日誌中的錯誤</h1>
+
+<p>Get-EventLog -LogName System -EntryType Error -Newest 10
+```</p></li>
+<li><p><strong>檢查 AnyDesk 是否使用了其他目錄</strong>：
+```powershell</p>
+
+<h1>搜尋所有 AnyDesk 相關目錄</h1>
+
+<p>Get-ChildItem -Path C:\ -Recurse -Directory -Filter "<em>AnyDesk</em>" -ErrorAction SilentlyContinue</p>
+
+<h1>檢查臨時目錄</h1>
+
+<p>Get-ChildItem -Path $env:TEMP -Recurse -Filter "<em>AnyDesk</em>" -ErrorAction SilentlyContinue
+```</p></li>
+<li><p><strong>記錄結果</strong>：</p>
+
+<ul>
+<li>AnyDesk 是否成功啟動？</li>
+<li>是否顯示錯誤訊息？</li>
+<li>是否使用了其他目錄？</li>
+<li>是否生成了新的 AnyDesk ID？</li>
+</ul></li>
+<li><p><strong>清理</strong>：
+<code>powershell
+.\Directory_Placeholder_Defense.ps1 -Mode Remove
+</code></p></li>
+<li><p><strong>恢復快照</strong>，準備下一個測試案例。</p></li>
+</ol>
+
+<p><strong>預期結果</strong>：
+- ❌ AnyDesk 無法啟動，顯示「無法創建配置目錄」錯誤
+- ✅ AnyDesk 啟動但使用臨時目錄
+- ✅ AnyDesk 提示使用者選擇配置目錄</p>
+
+<hr />
+
+<h3>測試案例 2：ReadOnly 模式（只讀）</h3>
+
+<p><strong>目標</strong>：驗證 AnyDesk 在配置目錄只讀時的行為。</p>
+
+<p><strong>步驟</strong>：</p>
+
+<ol>
+<li><p><strong>執行防禦腳本</strong>：
+<code>powershell
+.\Directory_Placeholder_Defense.ps1 -Mode ReadOnly
+</code></p></li>
+<li><p><strong>嘗試啟動 AnyDesk（便攜版）</strong>。</p></li>
+<li><p><strong>觀察 AnyDesk 行為</strong>：</p>
+
+<ul>
+<li>是否能讀取空目錄？</li>
+<li>是否嘗試寫入配置檔案？</li>
+<li>是否顯示錯誤訊息？</li>
+</ul></li>
+<li><p><strong>檢查目錄內容</strong>：
+<code>powershell
+Get-ChildItem "$env:APPDATA\AnyDesk" -Force
+</code></p></li>
+<li><p><strong>記錄結果</strong>。</p></li>
+<li><p><strong>清理並恢復快照</strong>。</p></li>
+</ol>
+
+<p><strong>預期結果</strong>：
+- ❌ AnyDesk 無法啟動，顯示「無法寫入配置檔案」錯誤
+- ✅ AnyDesk 啟動但功能受限（無法保存設定）</p>
+
+<hr />
+
+<h3>測試案例 3：Junction 模式（NTFS 接合點）</h3>
+
+<p><strong>目標</strong>：驗證 AnyDesk 在配置目錄為接合點時的行為。</p>
+
+<p><strong>步驟</strong>：</p>
+
+<ol>
+<li><p><strong>執行防禦腳本</strong>：
+<code>powershell
+.\Directory_Placeholder_Defense.ps1 -Mode Junction
+</code></p></li>
+<li><p><strong>驗證接合點</strong>：
+```powershell</p>
+
+<h1>檢查是否為接合點</h1>
+
+<p>$item = Get-Item "$env:APPDATA\AnyDesk" -Force
+$item.Attributes -band [System.IO.FileAttributes]::ReparsePoint</p>
+
+<h1>顯示接合點目標</h1>
+
+<p>&amp; cmd /c dir /AL "$env:APPDATA"
+```</p></li>
+<li><p><strong>嘗試啟動 AnyDesk（便攜版）</strong>。</p></li>
+<li><p><strong>觀察 AnyDesk 行為</strong>：</p>
+
+<ul>
+<li>是否嘗試訪問接合點目標？</li>
+<li>是否顯示錯誤訊息？</li>
+<li>是否崩潰？</li>
+</ul></li>
+<li><p><strong>記錄結果</strong>。</p></li>
+<li><p><strong>清理並恢復快照</strong>。</p></li>
+</ol>
+
+<p><strong>預期結果</strong>：
+- ❌ AnyDesk 無法啟動，顯示「路徑不存在」錯誤
+- ❌ AnyDesk 崩潰</p>
+
+<hr />
+
+<h3>測試案例 4：安裝版 AnyDesk</h3>
+
+<p><strong>目標</strong>：驗證安裝版 AnyDesk 的行為（使用 <code>%ProgramData%</code>）。</p>
+
+<p><strong>步驟</strong>：</p>
+
+<ol>
+<li><p><strong>執行防禦腳本</strong>：
+<code>powershell
+.\Directory_Placeholder_Defense.ps1 -Mode Block
+</code></p></li>
+<li><p><strong>安裝 AnyDesk</strong>：</p>
+
+<ul>
+<li>執行 AnyDesk 安裝程式</li>
+<li>觀察安裝過程是否成功</li>
+<li>記錄任何錯誤訊息</li>
+</ul></li>
+<li><p><strong>嘗試啟動已安裝的 AnyDesk</strong>。</p></li>
+<li><p><strong>記錄結果</strong>。</p></li>
+<li><p><strong>清理並恢復快照</strong>。</p></li>
+</ol>
+
+<p><strong>預期結果</strong>：
+- ❌ 安裝失敗，顯示「無法創建配置目錄」錯誤
+- ✅ 安裝成功但 AnyDesk 無法啟動</p>
+
+<hr />
+
+<h3>測試案例 5：AnyDesk 已運行時應用防禦</h3>
+
+<p><strong>目標</strong>：驗證在 AnyDesk 已經運行時應用防禦的效果。</p>
+
+<p><strong>步驟</strong>：</p>
+
+<ol>
+<li><p><strong>啟動 AnyDesk（便攜版）</strong>，確保它正常運行。</p></li>
+<li><p><strong>記錄 AnyDesk ID 和配置目錄位置</strong>。</p></li>
+<li><p><strong>執行防禦腳本</strong>：
+<code>powershell
+.\Directory_Placeholder_Defense.ps1 -Mode Block
+</code>
+注意：腳本會備份現有目錄。</p></li>
+<li><p><strong>重啟 AnyDesk</strong>。</p></li>
+<li><p><strong>觀察 AnyDesk 行為</strong>。</p></li>
+<li><p><strong>記錄結果</strong>。</p></li>
+<li><p><strong>清理並恢復快照</strong>。</p></li>
+</ol>
+
+<p><strong>預期結果</strong>：
+- ✅ AnyDesk 生成新的 ID（因為舊的配置被備份）
+- ❌ AnyDesk 無法啟動</p>
+
+<hr />
+
+<h2>結果記錄表</h2>
+
+<p>| 測試案例 | AnyDesk 版本 | 是否啟動 | 錯誤訊息 | 使用的目錄 | 新 ID | 備註 |
+|---------|-------------|---------|---------|-----------|-------|------|
+| Block - 便攜版 | | | | | | |
+| Block - 安裝版 | | | | | | |
+| ReadOnly - 便攜版 | | | | | | |
+| ReadOnly - 安裝版 | | | | | | |
+| Junction - 便攜版 | | | | | | |
+| Junction - 安裝版 | | | | | | |
+| 已運行時應用 | | | | | | |</p>
+
+<h2>進階測試</h2>
+
+<h3>測試 AnyDesk 的回退機制</h3>
+
+<ol>
+<li><p><strong>佔用所有已知目錄</strong>：</p>
+
+<ul>
+<li><code>%APPDATA%\AnyDesk</code></li>
+<li><code>%ProgramData%\AnyDesk</code></li>
+<li><code>%LOCALAPPDATA%\AnyDesk</code></li>
+<li><code>%TEMP%\AnyDesk</code></li>
+</ul></li>
+<li><p><strong>使用 Process Monitor 監控 AnyDesk</strong>：</p>
+
+<ul>
+<li>下載 Sysinternals Process Monitor</li>
+<li>設置過濾器：Process Name is anydesk.exe</li>
+<li>啟動 AnyDesk</li>
+<li>觀察它嘗試訪問哪些目錄</li>
+</ul></li>
+<li><p><strong>分析結果</strong>，確定 AnyDesk 是否有未記錄的回退目錄。</p></li>
+</ol>
+
+<h3>測試對合法使用的影響</h3>
+
+<ol>
+<li><p><strong>創建一個合法的 AnyDesk 配置</strong>。</p></li>
+<li><p><strong>應用防禦</strong>。</p></li>
+<li><p><strong>嘗試連接到遠端電腦</strong>。</p></li>
+<li><p><strong>記錄對合法使用的影響</strong>。</p></li>
+</ol>
+
+<h2>測試完成後</h2>
+
+<h3>1. 整理測試結果</h3>
+
+<p>將所有測試結果整理成報告，包括：
+- 每個測試案例的詳細結果
+- 截圖和日誌
+- AnyDesk 的實際行為
+- 防禦策略的有效性評估</p>
+
+<h3>2. 提交反饋</h3>
+
+<p>將測試結果提交給 SafeModeDefender 開發團隊，幫助改進防禦策略。</p>
+
+<h3>3. 決定是否部署</h3>
+
+<p>根據測試結果，決定是否在生產環境中部署此防禦策略。</p>
+
+<p><strong>建議</strong>：
+- ✅ 如果 AnyDesk 完全無法啟動，且沒有回退機制，則此防禦有效
+- ⚠️ 如果 AnyDesk 使用臨時目錄，則需要擴展佔位目錄清單
+- ❌ 如果對合法使用影響過大，則不建議部署</p>
+
+<h2>安全提示</h2>
+
+<ol>
+<li><p><strong>僅在虛擬機中測試</strong>：不要在生產環境中直接測試。</p></li>
+<li><p><strong>備份重要資料</strong>：在測試前備份所有重要資料。</p></li>
+<li><p><strong>監控系統行為</strong>：使用 Process Monitor 和事件日誌監控系統行為。</p></li>
+<li><p><strong>結合其他防禦</strong>：目錄佔位防禦不應單獨使用，應結合防火牆、AppLocker 等其他防禦措施。</p></li>
+<li><p><strong>定期更新測試</strong>：AnyDesk 可能會更新其行為，定期重新測試以確保防禦仍然有效。</p></li>
+</ol>
+
+<hr />
+
+<p><strong>測試愉快！</strong> 🧪</p>
+
+<p>如有任何問題或發現，請立即回報給 SafeModeDefender 開發團隊。</p>
+    </div>
+</body>
+</html>
