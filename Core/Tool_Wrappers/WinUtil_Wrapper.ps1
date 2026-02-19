@@ -44,7 +44,9 @@ function Show-ToolInfo {
     Write-Host "  GitHub：$($ToolInfo.GitHub)" -ForegroundColor Gray
     Write-Host "  星級：$($ToolInfo.Stars) ⭐" -ForegroundColor Yellow
     Write-Host "  授權：$($ToolInfo.License)" -ForegroundColor Gray
-    Write-Host "  安全模式支援：$(if ($ToolInfo.SafeModeSupport) { '✓ 是' } else { '✗ 否' })" -ForegroundColor $(if ($ToolInfo.SafeModeSupport) { 'Green' } else { 'Red' })
+    $safeModeText = if ($ToolInfo.SafeModeSupport) { '✓ 是' } else { '✗ 否' }
+    $safeModeColor = if ($ToolInfo.SafeModeSupport) { 'Green' } else { 'Red' }
+    Write-Host "  安全模式支援：$safeModeText" -ForegroundColor $safeModeColor
     Write-Host ""
 }
 

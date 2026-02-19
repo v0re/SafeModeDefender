@@ -233,6 +233,7 @@ function Show-InteractiveMenu {
     
     Write-Host ""
     Write-Host "  [L] 顯示完整工具列表（包含未整合的工具）" -ForegroundColor Gray
+    Write-Host "  [O] 離線資源管理" -ForegroundColor Gray
     Write-Host "  [B] 返回主選單" -ForegroundColor Gray
     Write-Host ""
     
@@ -240,6 +241,11 @@ function Show-InteractiveMenu {
     
     if ($choice -eq "L" -or $choice -eq "l") {
         Show-ToolsList
+        Read-Host "`n按 Enter 繼續..."
+        return "menu"
+    }
+    elseif ($choice -eq "O" -or $choice -eq "o") {
+        & "$PSScriptRoot\Offline_Resources_Manager.ps1"
         Read-Host "`n按 Enter 繼續..."
         return "menu"
     }

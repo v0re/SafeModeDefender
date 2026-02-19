@@ -135,6 +135,7 @@ echo   [H] 環境變數與 Hosts（2 個模塊）
 echo   [I] 防火牆與策略（3 個模塊）
 echo.
 echo   [T] 外部工具管理器
+echo   [O] 離線資源管理
 echo   [X] 執行完整掃描（所有 33 個模塊）
 echo   [R] 查看報告
 echo   [Q] 退出
@@ -152,6 +153,7 @@ if /i "%CHOICE%"=="F" goto MENU_F
 if /i "%CHOICE%"=="G" goto MENU_G
 if /i "%CHOICE%"=="H" goto MENU_H
 if /i "%CHOICE%"=="I" goto MENU_I
+if /i "%CHOICE%"=="O" goto OFFLINE_RESOURCES
 if /i "%CHOICE%"=="T" goto EXTERNAL_TOOLS
 if /i "%CHOICE%"=="X" goto RUN_FULL_SCAN
 if /i "%CHOICE%"=="R" goto VIEW_REPORTS
@@ -322,6 +324,19 @@ if defined CLI_TOOL (
     powershell -ExecutionPolicy Bypass -File "%~dp0Core\CLI_Handler.ps1" -Action "%CLI_ACTION%" -Category "%CLI_CATEGORY%" -Module "%CLI_MODULE%" -ConfigFile "%CLI_CONFIG%"
 )
 exit /b %errorlevel%
+
+:OFFLINE_RESOURCES
+cls
+echo ╔══════════════════════════════════════════════════════════════════════════╗
+echo ║                      離線資源管理器                                      ║
+echo ╚══════════════════════════════════════════════════════════════════════════╝
+echo.
+echo 正在啟動離線資源管理器...
+echo.
+powershell -ExecutionPolicy Bypass -File "%~dp0Core\Offline_Resources_Manager.ps1"
+echo.
+pause
+goto MAIN_MENU
 
 :EXTERNAL_TOOLS
 cls
