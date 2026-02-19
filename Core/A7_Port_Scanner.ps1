@@ -1,4 +1,4 @@
-﻿```powershell
+```powershell
 ﻿# encoding: utf-8
 <#
 .SYNOPSIS

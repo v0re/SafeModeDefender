@@ -1,4 +1,4 @@
-﻿# A8_Advanced_Port_Detection.ps1
+# A8_Advanced_Port_Detection.ps1
 # 增強版服務與端口檢測模塊 - 雙模式檢測（安全模式 + 正常模式）
 # 作者: SafeModeDefender Team
 # 版本: 2.1

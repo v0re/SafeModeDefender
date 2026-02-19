@@ -1,4 +1,4 @@
-﻿﻿# encoding: utf-8
+# encoding: utf-8
 <#
 .SYNOPSIS
     C3_Registry_Permissions - 註冊表權限異常檢測模塊

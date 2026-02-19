@@ -1,4 +1,4 @@
-﻿
+
 <#
 .SYNOPSIS
     I3_Network_Logon - 網路登入方式檢查模塊

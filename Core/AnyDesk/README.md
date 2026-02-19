@@ -1,4 +1,4 @@
-﻿# AnyDesk 安全模塊 (I1)
+# AnyDesk 安全模塊 (I1)
 
 此目錄包含 SafeModeDefender 的 AnyDesk 安全檢測、清理和預防相關的所有腳本。
 

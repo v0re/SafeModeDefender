@@ -1,4 +1,4 @@
-﻿﻿#region Script Header
+#region Script Header
 <#
 .SYNOPSIS
     C1_Autorun_Scanner - 註冊表自啟動項全面掃描模塊

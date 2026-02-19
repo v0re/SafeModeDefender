@@ -1,4 +1,4 @@
-﻿
+
 <#
 .SYNOPSIS
     F1_Privacy_Disable - Windows 隱私權全面關閉模塊

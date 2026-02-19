@@ -1,4 +1,4 @@
-﻿
+
 <#
 .SYNOPSIS
     SafeModeDefender v2.0 - A3_UPnP_Disable - UPnP/SSDP 服務禁用模塊

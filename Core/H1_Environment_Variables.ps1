@@ -1,4 +1,4 @@
-﻿
+
 ```powershell
 # H1_Environment_Variables.ps1
 # 環境變數安全檢測模塊

@@ -1,4 +1,4 @@
-﻿
+
 <#
 .SYNOPSIS
     C2_Registry_Hijack - 註冊表替換符檢測模塊

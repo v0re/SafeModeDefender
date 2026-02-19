@@ -1,4 +1,4 @@
-﻿# SafeModeDefender 外部工具整合計畫
+# SafeModeDefender 外部工具整合計畫
 
 ## 概述
 

@@ -1,4 +1,4 @@
-﻿# SafeModeDefender v2.0 - 完整防護矩陣
+# SafeModeDefender v2.0 - 完整防護矩陣
 
 ## 基於真實世界威脅情報的安全防護設計
 

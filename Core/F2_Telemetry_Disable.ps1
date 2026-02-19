@@ -1,4 +1,4 @@
-﻿# encoding: utf-8-with-bom
+# encoding: utf-8-with-bom
 # F2_Telemetry_Disable - Windows 遙測與診斷禁用模塊
 
 <#

@@ -1,4 +1,4 @@
-﻿
+
 <#
 .SYNOPSIS
     E1_Memory_Mitigation - 記憶體溢出漏洞緩解模塊

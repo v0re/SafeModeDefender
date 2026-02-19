@@ -1,4 +1,4 @@
-﻿#encoding: utf-8-with-bom
+#encoding: utf-8-with-bom
 <#
 .SYNOPSIS
     AnyDesk 運行模式檢測模組 - 檢測 AnyDesk 的三種運行模式

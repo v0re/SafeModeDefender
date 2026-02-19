@@ -1,4 +1,4 @@
-﻿﻿# encoding: utf-8
+# encoding: utf-8
 <#
 .SYNOPSIS
     C4_WMI_Events - WMI 事件訂閱檢測模塊
