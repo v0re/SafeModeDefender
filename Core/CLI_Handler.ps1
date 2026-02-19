@@ -156,7 +156,8 @@ $ModuleMapping = @{
     # 防火牆 (I)
     "I1_Firewall_Rules_Audit" = "Firewall\I1_Firewall_Rules_Audit.ps1"
     "I2_Windows_Firewall_Hardening" = "Firewall\I2_Windows_Firewall_Hardening.ps1"
-    "I3_Network_Profile_Security" = "Firewall\I3_Network_Profile_Security.ps1"
+    "I3_Network_Profile_Security" = "Firewall\I3_Network_Profile_Security.ps1",
+    "I1_AnyDesk_Security" = "AnyDesk\I1_AnyDesk_Security.ps1"
 }
 
 # 類別對應表
@@ -169,7 +170,7 @@ $CategoryMapping = @{
     "F" = @("F1_Telemetry_Disable", "F2_Privacy_Settings")
     "G" = @("G1_System_File_Checker", "G2_Component_Store_Health", "G3_BIOS_Update_Detection")
     "H" = @("H1_Environment_Variables_Scan", "H2_Hosts_File_Monitor")
-    "I" = @("I1_Firewall_Rules_Audit", "I2_Windows_Firewall_Hardening", "I3_Network_Profile_Security")
+    "I" = @("I1_Firewall_Rules_Audit", "I2_Windows_Firewall_Hardening", "I3_Network_Profile_Security", "I1_AnyDesk_Security")
 }
 
 # 執行模塊
