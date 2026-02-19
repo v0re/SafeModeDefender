@@ -196,6 +196,202 @@ if /i "%SUBCHOICE%"=="B" goto MAIN_MENU
 pause
 goto MENU_A
 
+:MENU_B
+cls
+echo ╔══════════════════════════════════════════════════════════════════════════╗
+echo ║                  系統權限與提權防護                                      ║
+echo ╚══════════════════════════════════════════════════════════════════════════╝
+echo.
+echo   [1] UAC 設定強化
+echo   [2] 管理員帳戶審計
+echo   [3] 特權令牌檢測
+echo   [4] 計劃任務權限檢查
+echo   [5] 服務權限審計
+echo.
+echo   [A] 執行所有權限防護模塊
+echo   [B] 返回主選單
+echo.
+set /p SUBCHOICE="請選擇模塊（1-5, A, B）："
+
+if "%SUBCHOICE%"=="1" call :RUN_MODULE "PrivilegeEscalation" "B1_UAC_Hardening"
+if "%SUBCHOICE%"=="2" call :RUN_MODULE "PrivilegeEscalation" "B2_Admin_Audit"
+if "%SUBCHOICE%"=="3" call :RUN_MODULE "PrivilegeEscalation" "B3_Token_Detection"
+if "%SUBCHOICE%"=="4" call :RUN_MODULE "PrivilegeEscalation" "B4_Task_Permissions"
+if "%SUBCHOICE%"=="5" call :RUN_MODULE "PrivilegeEscalation" "B5_Service_Audit"
+if /i "%SUBCHOICE%"=="A" call :RUN_CATEGORY "PrivilegeEscalation"
+if /i "%SUBCHOICE%"=="B" goto MAIN_MENU
+
+pause
+goto MENU_B
+
+:MENU_C
+cls
+echo ╔══════════════════════════════════════════════════════════════════════════╗
+echo ║                  註冊表與持久化防護                                      ║
+echo ╚══════════════════════════════════════════════════════════════════════════╝
+echo.
+echo   [1] Run/RunOnce 鍵值檢測
+echo   [2] 服務註冊表檢測
+echo   [3] WMI 事件訂閱檢測
+echo   [4] 啟動資料夾檢測
+echo.
+echo   [A] 執行所有持久化防護模塊
+echo   [B] 返回主選單
+echo.
+set /p SUBCHOICE="請選擇模塊（1-4, A, B）："
+
+if "%SUBCHOICE%"=="1" call :RUN_MODULE "RegistryPersistence" "C1_Run_Keys"
+if "%SUBCHOICE%"=="2" call :RUN_MODULE "RegistryPersistence" "C2_Service_Registry"
+if "%SUBCHOICE%"=="3" call :RUN_MODULE "RegistryPersistence" "C3_WMI_Events"
+if "%SUBCHOICE%"=="4" call :RUN_MODULE "RegistryPersistence" "C4_Startup_Folders"
+if /i "%SUBCHOICE%"=="A" call :RUN_CATEGORY "RegistryPersistence"
+if /i "%SUBCHOICE%"=="B" goto MAIN_MENU
+
+pause
+goto MENU_C
+
+:MENU_D
+cls
+echo ╔══════════════════════════════════════════════════════════════════════════╗
+echo ║                  檔案系統與隱藏威脅                                      ║
+echo ╚══════════════════════════════════════════════════════════════════════════╝
+echo.
+echo   [1] 隱藏檔案與 ADS 檢測
+echo   [2] 系統目錄異常檔案
+echo   [3] Temp 目錄清理
+echo   [4] 可疑 DLL 檢測
+echo.
+echo   [A] 執行所有檔案系統模塊
+echo   [B] 返回主選單
+echo.
+set /p SUBCHOICE="請選擇模塊（1-4, A, B）："
+
+if "%SUBCHOICE%"=="1" call :RUN_MODULE "FileSystem" "D1_Hidden_Files"
+if "%SUBCHOICE%"=="2" call :RUN_MODULE "FileSystem" "D2_System_Directory"
+if "%SUBCHOICE%"=="3" call :RUN_MODULE "FileSystem" "D3_Temp_Cleanup"
+if "%SUBCHOICE%"=="4" call :RUN_MODULE "FileSystem" "D4_Suspicious_DLL"
+if /i "%SUBCHOICE%"=="A" call :RUN_CATEGORY "FileSystem"
+if /i "%SUBCHOICE%"=="B" goto MAIN_MENU
+
+pause
+goto MENU_D
+
+:MENU_E
+cls
+echo ╔══════════════════════════════════════════════════════════════════════════╗
+echo ║                  記憶體與漏洞防護                                        ║
+echo ╚══════════════════════════════════════════════════════════════════════════╝
+echo.
+echo   [1] DEP/ASLR 檢查
+echo   [2] 可疑進程檢測
+echo   [3] 注入檢測
+echo.
+echo   [A] 執行所有記憶體防護模塊
+echo   [B] 返回主選單
+echo.
+set /p SUBCHOICE="請選擇模塊（1-3, A, B）："
+
+if "%SUBCHOICE%"=="1" call :RUN_MODULE "MemoryProtection" "E1_DEP_ASLR"
+if "%SUBCHOICE%"=="2" call :RUN_MODULE "MemoryProtection" "E2_Process_Detection"
+if "%SUBCHOICE%"=="3" call :RUN_MODULE "MemoryProtection" "E3_Injection_Detection"
+if /i "%SUBCHOICE%"=="A" call :RUN_CATEGORY "MemoryProtection"
+if /i "%SUBCHOICE%"=="B" goto MAIN_MENU
+
+pause
+goto MENU_E
+
+:MENU_F
+cls
+echo ╔══════════════════════════════════════════════════════════════════════════╗
+echo ║                  隱私權與遙測                                            ║
+echo ╚══════════════════════════════════════════════════════════════════════════╝
+echo.
+echo   [1] Windows 遙測禁用
+echo   [2] 隱私設定強化
+echo.
+echo   [A] 執行所有隱私防護模塊
+echo   [B] 返回主選單
+echo.
+set /p SUBCHOICE="請選擇模塊（1-2, A, B）："
+
+if "%SUBCHOICE%"=="1" call :RUN_MODULE "Privacy" "F1_Telemetry_Disable"
+if "%SUBCHOICE%"=="2" call :RUN_MODULE "Privacy" "F2_Privacy_Hardening"
+if /i "%SUBCHOICE%"=="A" call :RUN_CATEGORY "Privacy"
+if /i "%SUBCHOICE%"=="B" goto MAIN_MENU
+
+pause
+goto MENU_F
+
+:MENU_G
+cls
+echo ╔══════════════════════════════════════════════════════════════════════════╗
+echo ║                  系統完整性與更新                                        ║
+echo ╚══════════════════════════════════════════════════════════════════════════╝
+echo.
+echo   [1] 系統檔案完整性檢查
+echo   [2] Windows Update 檢查
+echo   [3] 驅動程式簽章驗證
+echo.
+echo   [A] 執行所有完整性模塊
+echo   [B] 返回主選單
+echo.
+set /p SUBCHOICE="請選擇模塊（1-3, A, B）："
+
+if "%SUBCHOICE%"=="1" call :RUN_MODULE "SystemIntegrity" "G1_File_Integrity"
+if "%SUBCHOICE%"=="2" call :RUN_MODULE "SystemIntegrity" "G2_Windows_Update"
+if "%SUBCHOICE%"=="3" call :RUN_MODULE "SystemIntegrity" "G3_Driver_Verification"
+if /i "%SUBCHOICE%"=="A" call :RUN_CATEGORY "SystemIntegrity"
+if /i "%SUBCHOICE%"=="B" goto MAIN_MENU
+
+pause
+goto MENU_G
+
+:MENU_H
+cls
+echo ╔══════════════════════════════════════════════════════════════════════════╗
+echo ║                  環境變數與 Hosts                                        ║
+echo ╚══════════════════════════════════════════════════════════════════════════╝
+echo.
+echo   [1] 環境變數檢測
+echo   [2] Hosts 檔案檢查
+echo.
+echo   [A] 執行所有環境檢查模塊
+echo   [B] 返回主選單
+echo.
+set /p SUBCHOICE="請選擇模塊（1-2, A, B）："
+
+if "%SUBCHOICE%"=="1" call :RUN_MODULE "Environment" "H1_Environment_Variables"
+if "%SUBCHOICE%"=="2" call :RUN_MODULE "Environment" "H2_Hosts_File"
+if /i "%SUBCHOICE%"=="A" call :RUN_CATEGORY "Environment"
+if /i "%SUBCHOICE%"=="B" goto MAIN_MENU
+
+pause
+goto MENU_H
+
+:MENU_I
+cls
+echo ╔══════════════════════════════════════════════════════════════════════════╗
+echo ║                  防火牆與策略                                            ║
+echo ╚══════════════════════════════════════════════════════════════════════════╝
+echo.
+echo   [1] Windows 防火牆規則審計
+echo   [2] 群組原則檢查
+echo   [3] 本地安全原則強化
+echo.
+echo   [A] 執行所有防火牆與策略模塊
+echo   [B] 返回主選單
+echo.
+set /p SUBCHOICE="請選擇模塊（1-3, A, B）："
+
+if "%SUBCHOICE%"=="1" call :RUN_MODULE "FirewallPolicy" "I1_Firewall_Rules"
+if "%SUBCHOICE%"=="2" call :RUN_MODULE "FirewallPolicy" "I2_Group_Policy"
+if "%SUBCHOICE%"=="3" call :RUN_MODULE "FirewallPolicy" "I3_Security_Policy"
+if /i "%SUBCHOICE%"=="A" call :RUN_CATEGORY "FirewallPolicy"
+if /i "%SUBCHOICE%"=="B" goto MAIN_MENU
+
+pause
+goto MENU_I
+
 :RUN_MODULE
 set CATEGORY=%~1
 set MODULE=%~2

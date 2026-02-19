@@ -33,7 +33,7 @@ $OptimizerDir = Join-Path $ToolsDir "optimizer"
 $OptimizerExe = Join-Path $OptimizerDir "Optimizer.exe"
 
 # 下載 URL
-$DownloadURL = "https://github.com/hellzerg/optimizer/releases/latest/download/Optimizer-18.7.exe"
+$DownloadURL = "https://github.com/hellzerg/optimizer/releases/latest/download/Optimizer-16.7.exe"
 
 # 顯示工具資訊
 function Show-ToolInfo {

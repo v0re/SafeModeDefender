@@ -67,7 +67,7 @@ $OfflineResources = @{
         Files = @(
             @{
                 Name = "Optimizer.exe"
-                URL = "https://github.com/hellzerg/optimizer/releases/latest/download/Optimizer-18.7.exe"
+                URL = "https://github.com/hellzerg/optimizer/releases/latest/download/Optimizer-16.7.exe"
                 Size = "~2 MB"
                 UpdateFrequency = "每月"
             }
@@ -81,8 +81,8 @@ $OfflineResources = @{
         Name = "TestDisk & PhotoRec"
         Files = @(
             @{
-                Name = "testdisk-7.2-WIP.win.zip"
-                URL = "https://www.cgsecurity.org/testdisk-7.2-WIP.win.zip"
+                Name = "testdisk-7.2.win64.zip"
+                URL = "https://www.cgsecurity.org/Download_and_donate.php/testdisk-7.2.win64.zip"
                 Size = "~5 MB"
                 UpdateFrequency = "不定期"
             }
@@ -97,7 +97,7 @@ $OfflineResources = @{
         Files = @(
             @{
                 Name = "simplewall.exe"
-                URL = "https://github.com/henrypp/simplewall/releases/latest/download/simplewall-3.7.7-setup.exe"
+                URL = "https://github.com/henrypp/simplewall/releases/latest/download/simplewall-3.8.3-setup.exe"
                 Size = "~2 MB"
                 UpdateFrequency = "每月"
             }

@@ -36,7 +36,7 @@ $PhotoRecExe = Join-Path $TestDiskDir "photorec_win.exe"
 $QPhotoRecExe = Join-Path $TestDiskDir "qphotorec_win.exe"
 
 # 下載 URL
-$DownloadURL = "https://www.cgsecurity.org/testdisk-7.2-WIP.win.zip"
+$DownloadURL = "https://www.cgsecurity.org/Download_and_donate.php/testdisk-7.2.win64.zip"
 
 # 顯示工具資訊
 function Show-ToolInfo {

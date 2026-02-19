@@ -1,0 +1,155 @@
+{
+  "version": "1.0",
+  "description": "佔位符防禦配置 - 自定義要替換的系統組件",
+  "suffix": "_system",
+  "targets": {
+    "ntlm": {
+      "enabled": true,
+      "description": "NTLM 認證相關組件",
+      "dlls": [
+        {
+          "path": "%SystemRoot%\\System32\\msv1_0.dll",
+          "description": "NTLM 認證提供者",
+          "risk": "高",
+          "enabled": true
+        },
+        {
+          "path": "%SystemRoot%\\System32\\ntlmshared.dll",
+          "description": "NTLM 共享函式庫",
+          "risk": "高",
+          "enabled": true
+        }
+      ],
+      "registry": [
+        {
+          "path": "HKLM:\\SYSTEM\\CurrentControlSet\\Control\\Lsa\\MSV1_0",
+          "description": "NTLM 配置",
+          "risk": "高",
+          "enabled": true
+        }
+      ],
+      "services": []
+    },
+    "smb": {
+      "enabled": false,
+      "description": "SMB 檔案共享相關組件",
+      "dlls": [
+        {
+          "path": "%SystemRoot%\\System32\\srv.sys",
+          "description": "SMB 伺服器驅動",
+          "risk": "中",
+          "enabled": false
+        }
+      ],
+      "registry": [
+        {
+          "path": "HKLM:\\SYSTEM\\CurrentControlSet\\Services\\LanmanServer\\Parameters",
+          "description": "SMB 伺服器配置",
+          "risk": "中",
+          "enabled": false
+        }
+      ],
+      "services": [
+        {
+          "name": "LanmanServer",
+          "description": "SMB 伺服器服務",
+          "risk": "中",
+          "enabled": false
+        }
+      ]
+    },
+    "rdp": {
+      "enabled": false,
+      "description": "遠端桌面相關組件",
+      "dlls": [
+        {
+          "path": "%SystemRoot%\\System32\\rdpcorets.dll",
+          "description": "RDP 核心傳輸",
+          "risk": "高",
+          "enabled": false
+        }
+      ],
+      "registry": [
+        {
+          "path": "HKLM:\\SYSTEM\\CurrentControlSet\\Control\\Terminal Server",
+          "description": "終端服務配置",
+          "risk": "高",
+          "enabled": false
+        }
+      ],
+      "services": [
+        {
+          "name": "TermService",
+          "description": "遠端桌面服務",
+          "risk": "高",
+          "enabled": false
+        }
+      ]
+    },
+    "winrm": {
+      "enabled": false,
+      "description": "Windows 遠端管理相關組件",
+      "dlls": [],
+      "registry": [
+        {
+          "path": "HKLM:\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\WSMAN",
+          "description": "WinRM 配置",
+          "risk": "高",
+          "enabled": false
+        }
+      ],
+      "services": [
+        {
+          "name": "WinRM",
+          "description": "Windows 遠端管理服務",
+          "risk": "高",
+          "enabled": false
+        }
+      ]
+    },
+    "anydesk": {
+      "enabled": false,
+      "description": "AnyDesk 遠端桌面",
+      "dlls": [],
+      "registry": [
+        {
+          "path": "HKLM:\\SOFTWARE\\AnyDesk",
+          "description": "AnyDesk 配置",
+          "risk": "高",
+          "enabled": false
+        }
+      ],
+      "services": [
+        {
+          "name": "AnyDesk",
+          "description": "AnyDesk 服務",
+          "risk": "高",
+          "enabled": false
+        }
+      ],
+      "directories": [
+        {
+          "path": "%ProgramData%\\AnyDesk",
+          "description": "AnyDesk 資料目錄",
+          "risk": "高",
+          "enabled": false
+        }
+      ]
+    },
+    "custom": {
+      "enabled": false,
+      "description": "自定義目標（由使用者添加）",
+      "dlls": [],
+      "registry": [],
+      "services": [],
+      "directories": []
+    }
+  },
+  "反制行為": {
+    "記錄攻擊者資訊": true,
+    "發送警報": true,
+    "反向連接": false,
+    "部署APT": false,
+    "蜜罐模式": true
+  }
+}

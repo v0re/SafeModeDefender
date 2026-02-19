@@ -722,6 +722,7 @@ Write-Log -Message "========== AnyDesk 安全檢測完成 ==========" -Level "IN
 # ============================================================================
 
 . "$PSScriptRoot\AnyDesk\Advanced_Attack_Detection.ps1"
+. "$PSScriptRoot\AnyDesk\Mode_Detection.ps1"
 
 # ============================================================================
 # 主執行邏輯
@@ -740,12 +741,33 @@ function Start-AnyDeskSecurityScan {
     Write-Log "開始 AnyDesk 安全掃描..."
     
     # 執行所有檢測
+    $modeDetectionResult = Get-AnyDeskMode
+    $privacyModeResult = Test-AnyDeskPrivacyMode
     $gpuAttackResult = Test-GPUAttackIndicators
     $privacyAbuseResult = Test-PrivacyModeAbuse
     $gpoTamperingResult = Test-GPOTampering
     $clickFixResult = Test-ClickFixIndicators
     
     # 整合檢測結果
+    $report.Detections += @{
+        Module = "AnyDesk Mode Detection"
+        Result = $modeDetectionResult
+    }
+    # 根據模式調整風險評分
+    switch ($modeDetectionResult.Mode) {
+        "Installed" { $report.RiskScore += 60 }
+        "PortableElevated" { $report.RiskScore += 40 }
+        "Portable" { $report.RiskScore += 20 }
+    }
+    
+    $report.Detections += @{
+        Module = "Privacy Mode Detection"
+        Result = $privacyModeResult
+    }
+    if ($privacyModeResult.PrivacyModeDetected) {
+        $report.RiskScore += 30
+    }
+    
     $report.Detections += @{
         Module = "GPU Attack Indicators"
         Result = $gpuAttackResult
