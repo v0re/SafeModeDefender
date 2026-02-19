@@ -43,6 +43,18 @@ function Write-Log {
 
 Write-Log -Message "G3_BIOS_Update 腳本啟動..."
 
+# 危險操作警告
+Write-Host "`n⚠️  警告：BIOS 更新是高風險操作！" -ForegroundColor Red
+Write-Host "   - BIOS 更新失敗可能導致系統無法啟動" -ForegroundColor Yellow
+Write-Host "   - 請確保電源穩定，不要在更新過程中斷電" -ForegroundColor Yellow
+Write-Host "   - 建議在專業人員指導下進行 BIOS 更新`n" -ForegroundColor Yellow
+
+$confirmation = Read-Host "是否繼續？(請輸入 'YES' 確認)"
+if ($confirmation -ne 'YES') {
+    Write-Log -Message "使用者取消 BIOS 更新檢查" -Level "INFO"
+    exit 0
+}
+
 #endregion
 
 #region 參數定義

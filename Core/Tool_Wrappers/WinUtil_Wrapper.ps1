@@ -28,10 +28,18 @@ $ToolInfo = @{
     SafeModeSupport = $true
 }
 
-# 工具路徑
-$ToolsDir = "$PSScriptRoot\..\..\Tools"
+# 工具路徑（使用路徑正規化確保跨平台兼容）
+$ScriptRoot = Split-Path -Parent $PSScriptRoot
+$ProjectRoot = Split-Path -Parent $ScriptRoot
+$ToolsDir = Join-Path $ProjectRoot "Tools"
 $WinUtilDir = Join-Path $ToolsDir "winutil"
 $WinUtilScript = Join-Path $WinUtilDir "winutil.ps1"
+
+# 驗證路徑
+if (-not (Test-Path $ProjectRoot)) {
+    Write-Error "無法找到專案根目錄：$ProjectRoot"
+    exit 1
+}
 
 # 顯示工具資訊
 function Show-ToolInfo {

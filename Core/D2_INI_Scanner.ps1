@@ -60,13 +60,28 @@ function Write-Log {
 
 function Get-IniContent {
     param(
+        [Parameter(Mandatory=$true)]
+        [ValidateNotNullOrEmpty()]
         [string]$FilePath
     )
+    
+    # 驗證檔案存在
+    if (-not (Test-Path -Path $FilePath -PathType Leaf)) {
+        Write-Log -Message "檔案不存在：$FilePath" -Level "ERROR"
+        return $null
+    }
+    
     try {
-        Get-Content -Path $FilePath -Raw -Encoding UTF8
+        # 嘗試使用不同編碼讀取
+        $content = Get-Content -Path $FilePath -Raw -Encoding UTF8 -ErrorAction Stop
+        return $content
+    }
+    catch [System.UnauthorizedAccessException] {
+        Write-Log -Message "無權限讀取檔案：$FilePath" -Level "ERROR"
+        return $null
     }
     catch {
-        Write-Log -Message "無法讀取 INI 檔案 $($FilePath)：$($_.Exception.Message)" -Level "ERROR"
+        Write-Log -Message "無法讀取 INI 檔案 $FilePath：$($_.Exception.Message)" -Level "ERROR"
         return $null
     }
 }
@@ -123,8 +138,10 @@ function Main {
     if (-not (Test-Path $LogPath)) { New-Item -Path $LogPath -ItemType Directory -Force | Out-Null }
     if (-not (Test-Path $ReportPath)) { New-Item -Path $ReportPath -ItemType Directory -Force | Out-Null }
 
-    $scanResults = @()
-    $targetPaths = @()
+    # 初始化變數（確保類型正確）
+    $scanResults = [System.Collections.ArrayList]::new()
+    $targetPaths = [System.Collections.ArrayList]::new()
+    $iniFiles = [System.Collections.ArrayList]::new()
 
     if ([string]::IsNullOrEmpty($Path)) {
         Write-Log -Message "未指定掃描路徑，將掃描系統關鍵目錄。" -Level "INFO"

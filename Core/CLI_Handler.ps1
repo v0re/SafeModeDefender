@@ -257,19 +257,37 @@ if ($ConfigFile) {
     }
     
     try {
-        $config = Get-Content $ConfigFile -Raw | ConvertFrom-Json
-        Write-Host "[資訊] 載入配置檔：$ConfigFile" -ForegroundColor Cyan
+        $config = Get-Content $ConfigFile -Raw -ErrorAction Stop | ConvertFrom-Json -ErrorAction Stop
         
+        # 驗證配置檔結構
+        if (-not $config.tasks) {
+            Write-Host "[錯誤] 配置檔格式錯誤：缺少 'tasks' 字段" -ForegroundColor Red
+            exit 1
+        }
+        
+        Write-Host "[資訊] 載入配置檔：$ConfigFile" -ForegroundColor Cyan
+        Write-Host "[資訊] 共 $($config.tasks.Count) 個任務" -ForegroundColor Cyan
+        
+        $taskIndex = 0
         foreach ($task in $config.tasks) {
+            $taskIndex++
             Write-Host "`n執行任務：$($task.type)" -ForegroundColor Green
             
             switch ($task.type) {
                 "scan" {
-                    if ($task.category) {
-                        Invoke-Category -CategoryCode $task.category
+                    try {
+                        if ($task.category) {
+                            Invoke-Category -CategoryCode $task.category
+                        }
+                        elseif ($task.module) {
+                            Invoke-Module -ModuleName $task.module
+                        }
+                        else {
+                            Write-Host "[警告] 任務 $taskIndex 缺少 category 或 module 參數" -ForegroundColor Yellow
+                        }
                     }
-                    elseif ($task.module) {
-                        Invoke-Module -ModuleName $task.module
+                    catch {
+                        Write-Host "[錯誤] 任務 $taskIndex 執行失敗：$($_.Exception.Message)" -ForegroundColor Red
                     }
                 }
                 "tool" {

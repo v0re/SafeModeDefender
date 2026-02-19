@@ -100,7 +100,15 @@ function Backup-OriginalSettings {
             $OriginalSettings.Services[$serviceName] = $service.StartType
             Write-Log -Message "已備份服務 '$serviceName' 的啟動類型為 '$($service.StartType)'。" -Level "DEBUG"
         }
-        catch {
+        catch [System.UnauthorizedAccessException] {
+        Write-Log -Message "無權限執行操作：$($_.Exception.Message)" -Level "ERROR"
+        return $false
+    }
+    catch [System.Management.Automation.ItemNotFoundException] {
+        Write-Log -Message "找不到指定的註冊表項目：$($_.Exception.Message)" -Level "WARN"
+        return $false
+    }
+    catch {
             Write-Log -Message "無法備份服務 '$serviceName'：$($_.Exception.Message)" -Level "WARN"
         }
     }
@@ -153,7 +161,15 @@ function Disable-TelemetryServices {
                 Write-Log -Message "服務 '$serviceName' 不存在，跳過。" -Level "WARN"
             }
         }
-        catch {
+        catch [System.UnauthorizedAccessException] {
+        Write-Log -Message "無權限執行操作：$($_.Exception.Message)" -Level "ERROR"
+        return $false
+    }
+    catch [System.Management.Automation.ItemNotFoundException] {
+        Write-Log -Message "找不到指定的註冊表項目：$($_.Exception.Message)" -Level "WARN"
+        return $false
+    }
+    catch {
             Write-Log -Message "禁用服務 '$serviceName' 失敗：$($_.Exception.Message)" -Level "ERROR"
         }
     }
@@ -231,7 +247,15 @@ function Generate-DetectionReport {
                 $report.Details.Services[$serviceName] = @{ Exists = $false }
             }
         }
-        catch {
+        catch [System.UnauthorizedAccessException] {
+        Write-Log -Message "無權限執行操作：$($_.Exception.Message)" -Level "ERROR"
+        return $false
+    }
+    catch [System.Management.Automation.ItemNotFoundException] {
+        Write-Log -Message "找不到指定的註冊表項目：$($_.Exception.Message)" -Level "WARN"
+        return $false
+    }
+    catch {
             $report.Details.Services[$serviceName] = @{ Error = $_.Exception.Message }
         }
     }
@@ -262,7 +286,15 @@ function Generate-DetectionReport {
                 $report.Details.Registry["$regPath\$valueName"] = @{ Exists = $false }
             }
         }
-        catch {
+        catch [System.UnauthorizedAccessException] {
+        Write-Log -Message "無權限執行操作：$($_.Exception.Message)" -Level "ERROR"
+        return $false
+    }
+    catch [System.Management.Automation.ItemNotFoundException] {
+        Write-Log -Message "找不到指定的註冊表項目：$($_.Exception.Message)" -Level "WARN"
+        return $false
+    }
+    catch {
             $report.Details.Registry["$regPath\$valueName"] = @{ Error = $_.Exception.Message }
         }
     }
@@ -287,7 +319,15 @@ function Rollback-Changes {
                     Write-Log -Message "服務 '$serviceName' 已成功恢復。" -Level "INFO"
                 }
             }
-            catch {
+            catch [System.UnauthorizedAccessException] {
+        Write-Log -Message "無權限執行操作：$($_.Exception.Message)" -Level "ERROR"
+        return $false
+    }
+    catch [System.Management.Automation.ItemNotFoundException] {
+        Write-Log -Message "找不到指定的註冊表項目：$($_.Exception.Message)" -Level "WARN"
+        return $false
+    }
+    catch {
                 Write-Log -Message "恢復服務 '$serviceName' 失敗：$($_.Exception.Message)" -Level "ERROR"
             }
         }
@@ -355,6 +395,14 @@ function Main {
             Modify-RegistrySettings
             Generate-DetectionReport
         }
+    }
+    catch [System.UnauthorizedAccessException] {
+        Write-Log -Message "無權限執行操作：$($_.Exception.Message)" -Level "ERROR"
+        return $false
+    }
+    catch [System.Management.Automation.ItemNotFoundException] {
+        Write-Log -Message "找不到指定的註冊表項目：$($_.Exception.Message)" -Level "WARN"
+        return $false
     }
     catch {
         Write-Log -Message "執行過程中發生錯誤：$($_.Exception.Message)" -Level "ERROR"
