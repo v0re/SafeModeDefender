@@ -15,7 +15,9 @@ param(
 )
 
 # 設定 UTF-8 編碼
+$OutputEncoding = [System.Text.Encoding]::UTF8
 [Console]::OutputEncoding = [System.Text.Encoding]::UTF8
+$PSDefaultParameterValues['*:Encoding'] = 'utf8'
 
 # 工具資訊
 $ToolName = "PrivescCheck"
