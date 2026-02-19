@@ -14,7 +14,10 @@
     6. 分析 AnyDesk 進程的命令列參數，檢測可疑的 CLI 濫用
     7. 審查 AnyDesk 日誌檔案，識別暴力破解和未授權連接嘗試
     8. 檢查硬體指紋和環境變動跡象
-    9. 生成詳細的 JSON 格式檢測報告，包含所有發現和修復建議
+    9. **檢測顯卡渲染攻擊跡象（Direct3D 錯誤 0x8876086c）**
+    10. **分析 AnyDesk 隱私模式濫用和畫面異常**
+    11. **檢測 GPO 篡改和系統管理工具封鎖**
+    12. 生成詳細的 JSON 格式檢測報告，包含所有發現和修復建議
 
 .PARAMETER WhatIf
     如果指定此參數，腳本將顯示將要執行的操作，但不會實際執行它們。
@@ -712,3 +715,81 @@ catch {
 Write-Log -Message "========== AnyDesk 安全檢測完成 ==========" -Level "INFO"
 
 #endregion
+
+
+# ============================================================================
+# 導入進階檢測函數
+# ============================================================================
+
+. "$PSScriptRoot\AnyDesk\Advanced_Attack_Detection.ps1"
+
+# ============================================================================
+# 主執行邏輯
+# ============================================================================
+
+function Start-AnyDeskSecurityScan {
+    
+    $report = @{
+        ScanTimestamp = Get-Date -Format "yyyy-MM-dd HH:mm:ss"
+        ComputerName = $env:COMPUTERNAME
+        Detections = @()
+        RiskScore = 0
+        Summary = ""
+    }
+    
+    Write-Log "開始 AnyDesk 安全掃描..."
+    
+    # 執行所有檢測
+    $gpuAttackResult = Test-GPUAttackIndicators
+    $privacyAbuseResult = Test-PrivacyModeAbuse
+    $gpoTamperingResult = Test-GPOTampering
+    $clickFixResult = Test-ClickFixIndicators
+    
+    # 整合檢測結果
+    $report.Detections += @{
+        Module = "GPU Attack Indicators"
+        Result = $gpuAttackResult
+    }
+    $report.RiskScore += $gpuAttackResult.RiskScore
+    
+    $report.Detections += @{
+        Module = "Privacy Mode Abuse"
+        Result = $privacyAbuseResult
+    }
+    $report.RiskScore += $privacyAbuseResult.RiskScore
+    
+    $report.Detections += @{
+        Module = "GPO Tampering"
+        Result = $gpoTamperingResult
+    }
+    $report.RiskScore += $gpoTamperingResult.RiskScore
+    
+    $report.Detections += @{
+        Module = "ClickFix Indicators"
+        Result = $clickFixResult
+    }
+    $report.RiskScore += $clickFixResult.RiskScore
+    
+    # 生成總結
+    if ($report.RiskScore -ge 100) {
+        $report.Summary = "[極高風險] 系統已確認遭到多層次 APT 攻擊！"
+    }
+    elseif ($report.RiskScore -ge 50) {
+        $report.Summary = "[高風險] 發現多個攻擊指標，強烈建議立即進行手動鑑識和清理。"
+    }
+    elseif ($report.RiskScore -gt 0) {
+        $report.Summary = "[中等風險] 發現可疑活動，建議進一步調查。"
+    }
+    else {
+        $report.Summary = "[低風險] 未發現明顯的攻擊指標。"
+    }
+    
+    Write-Log "掃描完成，總風險評分：$($report.RiskScore)" -Level "WARN"
+    
+    # 保存報告
+    $report | ConvertTo-Json -Depth 10 | Out-File -FilePath $ReportPath -Encoding UTF8
+    Write-Log "檢測報告已保存到：$ReportPath"
+}
+
+# 執行主函數
+Start-AnyDeskSecurityScan
