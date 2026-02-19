@@ -136,13 +136,14 @@ echo   [I] 防火牆與策略（3 個模塊）
 echo.
 echo   [T] 外部工具管理器
 echo   [O] 離線資源管理
+echo   [S] 特殊防護工具（AnyDesk、NTLM、雲端清理）
 echo   [X] 執行完整掃描（所有 33 個模塊）
 echo   [R] 查看報告
 echo   [Q] 退出
 echo.
 echo ══════════════════════════════════════════════════════════════════════════
 echo.
-set /p CHOICE="請選擇功能（A-I, X, R, Q）："
+set /p CHOICE="請選擇功能（A-I, T, O, S, X, R, Q）："
 
 if /i "%CHOICE%"=="A" goto MENU_A
 if /i "%CHOICE%"=="B" goto MENU_B
@@ -155,6 +156,7 @@ if /i "%CHOICE%"=="H" goto MENU_H
 if /i "%CHOICE%"=="I" goto MENU_I
 if /i "%CHOICE%"=="O" goto OFFLINE_RESOURCES
 if /i "%CHOICE%"=="T" goto EXTERNAL_TOOLS
+if /i "%CHOICE%"=="S" goto SPECIAL_TOOLS
 if /i "%CHOICE%"=="X" goto RUN_FULL_SCAN
 if /i "%CHOICE%"=="R" goto VIEW_REPORTS
 if /i "%CHOICE%"=="Q" goto EXIT
@@ -489,6 +491,62 @@ if exist "%~dp0Reports\*.html" (
 echo.
 pause
 goto MAIN_MENU
+
+:SPECIAL_TOOLS
+cls
+echo ╔══════════════════════════════════════════════════════════════════════════╗
+echo ║                          特殊防護工具                                    ║
+echo ╚══════════════════════════════════════════════════════════════════════════╝
+echo.
+echo 請選擇要執行的特殊防護工具：
+echo.
+echo   [1] AnyDesk 安全防護
+echo       - 檢測 AnyDesk 安裝和配置
+echo       - 檢測無人值守訪問
+echo       - 檢測 AnyDesk 模式 (可攜式/安裝版)
+echo.
+echo   [2] NTLM 欺騙式防禦
+echo       - 禁用 NTLM 並強制使用 Kerberos
+echo       - 啟用 NTLM 審計日誌
+echo       - 記錄所有 NTLM 攻擊嘗試
+echo.
+echo   [3] NTLM 佔位符反制系統
+echo       - 將 NTLM DLL 替換為反制腳本
+echo       - 自動收集攻擊者資訊
+echo       - 可自定義佔位符目標
+echo.
+echo   [4] 通用佔位符防禦
+echo       - 可自定義要替換的 DLL/服務/註冊表
+echo       - 支援 NTLM/SMB/RDP/WinRM/AnyDesk
+echo       - JSON 配置檔案管理
+echo.
+echo   [B] 返回主選單
+echo.
+set /p STCHOICE="請選擇 (1-4, B): "
+
+if "%STCHOICE%"=="1" (
+    powershell.exe -ExecutionPolicy Bypass -File "%~dp0Core\I1_AnyDesk_Security.ps1"
+    pause
+    goto SPECIAL_TOOLS
+) else if "%STCHOICE%"=="2" (
+    powershell.exe -ExecutionPolicy Bypass -File "%~dp0Core\NTLM_Deception_Defense.ps1" -EnableDeception
+    pause
+    goto SPECIAL_TOOLS
+) else if "%STCHOICE%"=="3" (
+    powershell.exe -ExecutionPolicy Bypass -File "%~dp0Core\NTLM_Reverse_Exploit.ps1" -Enable
+    pause
+    goto SPECIAL_TOOLS
+) else if "%STCHOICE%"=="4" (
+    powershell.exe -ExecutionPolicy Bypass -File "%~dp0Core\Universal_Placeholder_Defense.ps1" -ListTargets
+    pause
+    goto SPECIAL_TOOLS
+) else if /i "%STCHOICE%"=="B" (
+    goto MAIN_MENU
+) else (
+    echo [錯誤] 無效的選擇
+    timeout /t 2 >nul
+    goto SPECIAL_TOOLS
+)
 
 :EXIT
 cls

@@ -252,10 +252,18 @@ function Show-InteractiveMenu {
     elseif ($choice -eq "B" -or $choice -eq "b") {
         return "exit"
     }
-    elseif ($choice -match '^\d+$' -and [int]$choice -ge 1 -and [int]$choice -le $toolsList.Count) {
-        $selectedTool = $toolsList[[int]$choice - 1]
-        Invoke-ToolWrapper -ToolKey $selectedTool
-        return "menu"
+    elseif ($choice -match '^\d+$') {
+        $choiceNum = [int]$choice
+        if ($choiceNum -ge 1 -and $choiceNum -le $toolsList.Count) {
+            $selectedTool = $toolsList[$choiceNum - 1]
+            Invoke-ToolWrapper -ToolKey $selectedTool
+            return "menu"
+        }
+        else {
+            Write-Host "[錯誤] 無效的選擇" -ForegroundColor Red
+            Start-Sleep -Seconds 1
+            return "menu"
+        }
     }
     else {
         Write-Host "[錯誤] 無效的選擇" -ForegroundColor Red
