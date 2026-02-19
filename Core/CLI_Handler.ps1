@@ -181,11 +181,18 @@ function Invoke-Module {
         return $false
     }
     
-    $modulePath = Join-Path "$PSScriptRoot\..\Core" $ModuleMapping[$ModuleName]
+    # 使用安全的路徑處理
+    $coreDir = Split-Path -Parent $PSScriptRoot
+    $modulePath = Join-Path $coreDir $ModuleMapping[$ModuleName]
     
+    # 驗證檔案存在
     if (-not (Test-Path $modulePath)) {
-        Write-Host "[警告] 模塊檔案不存在：$modulePath" -ForegroundColor Yellow
-        Write-Host "[資訊] 此模塊可能尚未開發完成" -ForegroundColor Gray
+        Write-Host "`n[錯誤] 模塊檔案不存在：$modulePath" -ForegroundColor Red
+        Write-Host "[原因] 此模塊可能尚未開發完成或檔案被移動" -ForegroundColor Yellow
+        Write-Host "[建議] 請執行以下檢查：" -ForegroundColor Cyan
+        Write-Host "  1. 確認 SafeModeDefender 安裝完整：git pull" -ForegroundColor Gray
+        Write-Host "  2. 檢查檔案是否存在：Test-Path '$modulePath'" -ForegroundColor Gray
+        Write-Host "  3. 查看可用模塊清單：Get-ChildItem '$coreDir' -Filter '*.ps1'`n" -ForegroundColor Gray
         return $false
     }
     

@@ -40,27 +40,63 @@ $BOM = New-Object System.Text.UTF8Encoding $true
 [Console]::OutputEncoding = $BOM
 [Console]::InputEncoding = $BOM
 
-# 載入共用函數和日誌模塊 (假設這些文件存在於 Core 目錄下)
-# 實際部署時需要確保這些路徑正確
+# 載入共用函數和日誌模塊（使用安全的路徑處理）
 $ScriptDir = Split-Path -Parent $MyInvocation.MyCommand.Definition
-$CoreDir = Join-Path $ScriptDir "..\.."
+$ProjectRoot = Split-Path -Parent (Split-Path -Parent $ScriptDir)
+$CoreDir = Join-Path $ProjectRoot "Core"
 $LoggerPath = Join-Path $CoreDir "Logger.ps1"
 $UtilsPath = Join-Path $CoreDir "Utils.ps1"
 
-# 檢查並載入 Logger.ps1 和 Utils.ps1
+# 檢查並載入 Logger.ps1
 if (Test-Path $LoggerPath) {
-    . $LoggerPath
+    try {
+        . $LoggerPath
+        Write-Verbose "成功載入日誌模塊：$LoggerPath"
+    }
+    catch {
+        Write-Warning "載入日誌模塊失敗：$($_.Exception.Message)"
+        function Write-Log { 
+            param([string]$Level = "INFO", [string]$Message) 
+            $timestamp = Get-Date -Format "yyyy-MM-dd HH:mm:ss"
+            Write-Host "[$timestamp][$Level] $Message" 
+        }
+    }
 } else {
-    Write-Warning "無法載入日誌模塊：$LoggerPath。日誌功能將受限。"
-    function Write-Log { param([string]$Level, [string]$Message) { Write-Host "[$Level] $Message" } }
+    Write-Warning "找不到日誌模塊：$LoggerPath。使用內建日誌功能。"
+    # 提供完整的內建日誌函數
+    function Write-Log { 
+        param([string]$Level = "INFO", [string]$Message) 
+        $timestamp = Get-Date -Format "yyyy-MM-dd HH:mm:ss"
+        $color = switch ($Level) {
+            "ERROR" { "Red" }
+            "WARN"  { "Yellow" }
+            "DEBUG" { "Gray" }
+            default { "White" }
+        }
+        Write-Host "[$timestamp][$Level] $Message" -ForegroundColor $color
+    }
 }
 
+# 檢查並載入 Utils.ps1
 if (Test-Path $UtilsPath) {
-    . $UtilsPath
+    try {
+        . $UtilsPath
+        Write-Verbose "成功載入工具模塊：$UtilsPath"
+    }
+    catch {
+        Write-Warning "載入工具模塊失敗：$($_.Exception.Message)"
+        function Show-Progress { 
+            param([string]$Activity, [string]$Status, [int]$PercentComplete) 
+            Write-Progress -Activity $Activity -Status $Status -PercentComplete $PercentComplete 
+        }
+    }
 } else {
-    Write-Warning "無法載入工具函數模塊：$UtilsPath。部分功能可能無法使用。"
-    # 提供一個基本的進度顯示函數作為備用
-    function Show-Progress { param([string]$Activity, [string]$Status, [int]$PercentComplete) { Write-Progress -Activity $Activity -Status $Status -PercentComplete $PercentComplete } }
+    Write-Warning "找不到工具模塊：$UtilsPath。使用內建功能。"
+    # 提供基本的進度顯示函數
+    function Show-Progress { 
+        param([string]$Activity, [string]$Status, [int]$PercentComplete) 
+        Write-Progress -Activity $Activity -Status $Status -PercentComplete $PercentComplete 
+    }
 }
 
 # 定義模塊名稱，用於日誌記錄和報告
