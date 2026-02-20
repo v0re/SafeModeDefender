@@ -1,0 +1,39 @@
+# 強制所有文字檔案使用 Windows CRLF 換行符號
+# 防止 Git 自動轉換為 LF
+
+# 批次檔案
+*.bat text eol=crlf
+*.cmd text eol=crlf
+
+# PowerShell 腳本
+*.ps1 text eol=crlf
+*.psm1 text eol=crlf
+*.psd1 text eol=crlf
+
+# 設定檔
+*.json text eol=crlf
+*.xml text eol=crlf
+*.ini text eol=crlf
+*.cfg text eol=crlf
+
+# 文檔
+*.md text eol=crlf
+*.txt text eol=crlf
+*.html text eol=crlf
+*.css text eol=crlf
+
+# 其他文字檔案
+*.log text eol=crlf
+*.csv text eol=crlf
+
+# 二進位檔案（不轉換）
+*.exe binary
+*.dll binary
+*.zip binary
+*.7z binary
+*.rar binary
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
