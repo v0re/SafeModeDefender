@@ -404,18 +404,16 @@ echo 執行模塊：%MODULE%
 echo ══════════════════════════════════════════════════════════════════════════
 echo.
 
-if %POWERSHELL_AVAILABLE% equ 1 (
-    if exist "%~dp0Core\%CATEGORY%\%MODULE%.ps1" (
-        powershell -ExecutionPolicy Bypass -File "%~dp0Core\%CATEGORY%\%MODULE%.ps1"
-    ) else (
-        echo [錯誤] PowerShell 模塊不存在：%MODULE%.ps1
+:: 強制嘗試執行 PowerShell（即使被標記為不可用）
+if exist "%~dp0Core\%CATEGORY%\%MODULE%.ps1" (
+    echo [資訊] 嘗試執行 PowerShell 模塊...
+    powershell.exe -NoProfile -ExecutionPolicy Bypass -Command "& '%~dp0Core\%CATEGORY%\%MODULE%.ps1'"
+    if errorlevel 1 (
+        echo [警告] PowerShell 執行失敗，可能被群組原則限制
+        echo [提示] 請以管理員身份運行或聯繫系統管理員
     )
 ) else (
-    if exist "%~dp0Batch\%MODULE%.bat" (
-        call "%~dp0Batch\%MODULE%.bat"
-    ) else (
-        echo [錯誤] 批次檔模塊不存在：%MODULE%.bat
-    )
+    echo [錯誤] 模塊不存在：Core\%CATEGORY%\%MODULE%.ps1
 )
 
 echo.
@@ -525,19 +523,19 @@ echo.
 set /p STCHOICE="請選擇 (1-4, B): "
 
 if "%STCHOICE%"=="1" (
-    powershell.exe -ExecutionPolicy Bypass -File "%~dp0Core\I1_AnyDesk_Security.ps1"
+    powershell.exe -NoProfile -ExecutionPolicy Bypass -Command "& '%~dp0Core\I1_AnyDesk_Security.ps1'"
     pause
     goto SPECIAL_TOOLS
 ) else if "%STCHOICE%"=="2" (
-    powershell.exe -ExecutionPolicy Bypass -File "%~dp0Core\NTLM_Deception_Defense.ps1" -EnableDeception
+    powershell.exe -NoProfile -ExecutionPolicy Bypass -Command "& '%~dp0Core\NTLM_Deception_Defense.ps1' -EnableDeception"
     pause
     goto SPECIAL_TOOLS
 ) else if "%STCHOICE%"=="3" (
-    powershell.exe -ExecutionPolicy Bypass -File "%~dp0Core\NTLM_Reverse_Exploit.ps1" -Enable
+    powershell.exe -NoProfile -ExecutionPolicy Bypass -Command "& '%~dp0Core\NTLM_Reverse_Exploit.ps1' -Enable"
     pause
     goto SPECIAL_TOOLS
 ) else if "%STCHOICE%"=="4" (
-    powershell.exe -ExecutionPolicy Bypass -File "%~dp0Core\Universal_Placeholder_Defense.ps1" -ListTargets
+    powershell.exe -NoProfile -ExecutionPolicy Bypass -Command "& '%~dp0Core\Universal_Placeholder_Defense.ps1' -ListTargets"
     pause
     goto SPECIAL_TOOLS
 ) else if /i "%STCHOICE%"=="B" (
@@ -568,14 +566,14 @@ timeout /t 3
 exit /b 0
 
 :SHOW_CLI_HELP
-powershell -ExecutionPolicy Bypass -File "%~dp0Core\CLI_Handler.ps1" -Help
+powershell.exe -NoProfile -ExecutionPolicy Bypass -Command "& '%~dp0Core\CLI_Handler.ps1' -Help"
 exit /b 0
 
 :CLI_HANDLER
 if defined CLI_TOOL (
-    powershell -ExecutionPolicy Bypass -File "%~dp0Core\External_Tools_Manager.ps1" -Tool "%CLI_TOOL%" -Action "%CLI_ACTION%" -CLI
+    powershell.exe -NoProfile -ExecutionPolicy Bypass -Command "& '%~dp0Core\External_Tools_Manager.ps1' -Tool '%CLI_TOOL%' -Action '%CLI_ACTION%' -CLI"
 ) else (
-    powershell -ExecutionPolicy Bypass -File "%~dp0Core\CLI_Handler.ps1" -Action "%CLI_ACTION%" -Category "%CLI_CATEGORY%" -Module "%CLI_MODULE%" -ConfigFile "%CLI_CONFIG%"
+    powershell.exe -NoProfile -ExecutionPolicy Bypass -Command "& '%~dp0Core\CLI_Handler.ps1' -Action '%CLI_ACTION%' -Category '%CLI_CATEGORY%' -Module '%CLI_MODULE%' -ConfigFile '%CLI_CONFIG%'"
 )
 exit /b %errorlevel%
 
@@ -587,7 +585,7 @@ echo ╚════════════════════════
 echo.
 echo 正在啟動離線資源管理器...
 echo.
-powershell -ExecutionPolicy Bypass -File "%~dp0Core\Offline_Resources_Manager.ps1"
+powershell.exe -NoProfile -ExecutionPolicy Bypass -Command "& '%~dp0Core\Offline_Resources_Manager.ps1'"
 echo.
 pause
 goto MAIN_MENU
@@ -600,7 +598,7 @@ echo ╚════════════════════════
 echo.
 echo 正在啟動外部工具管理器...
 echo.
-powershell -ExecutionPolicy Bypass -File "%~dp0Core\External_Tools_Manager.ps1"
+powershell.exe -NoProfile -ExecutionPolicy Bypass -Command "& '%~dp0Core\External_Tools_Manager.ps1'"
 echo.
 pause
 goto MAIN_MENU
