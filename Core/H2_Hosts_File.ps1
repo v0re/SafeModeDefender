@@ -1,4 +1,4 @@
-<#
+﻿<#
 .SYNOPSIS
     H2_Hosts_File - Hosts 檔案安全檢測模塊
     此腳本用於檢測 Windows 系統中的 Hosts 檔案是否被惡意修改，並提供修復選項。

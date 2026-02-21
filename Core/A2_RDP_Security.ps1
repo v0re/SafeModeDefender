@@ -1,4 +1,4 @@
-<#
+﻿<#
 .SYNOPSIS
     A2_RDP_Security - RDP 服務安全強化模塊
     此腳本用於強化 Windows 系統的遠端桌面服務 (RDP) 安全配置，防範常見的 RDP 相關威脅。

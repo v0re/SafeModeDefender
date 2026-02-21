@@ -1,4 +1,4 @@
-# A9_Process_Behavior_Analysis.ps1
+﻿# A9_Process_Behavior_Analysis.ps1
 # 進程行為模式識別模塊
 # 作者: SafeModeDefender Team
 # 版本: 2.1

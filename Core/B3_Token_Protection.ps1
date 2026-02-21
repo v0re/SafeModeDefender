@@ -1,4 +1,4 @@
-<#
+﻿<#
 .SYNOPSIS
     B3_Token_Protection - Token 競取與模擬防護模塊
 .DESCRIPTION

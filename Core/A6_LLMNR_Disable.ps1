@@ -1,4 +1,4 @@
-# encoding: utf-8-bom
+﻿# encoding: utf-8-bom
 <#
 .SYNOPSIS
     禁用 Windows 系統上的 LLMNR 和 NetBIOS-NS 協議，以增強安全性。

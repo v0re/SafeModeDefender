@@ -1,4 +1,4 @@
-
+﻿
 <#
 .SYNOPSIS
     D2_INI_Scanner - INI 檔案安全掃描模塊

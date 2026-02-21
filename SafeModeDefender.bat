@@ -405,14 +405,14 @@ echo ═════════════════════════
 echo.
 
 if %POWERSHELL_AVAILABLE% equ 1 (
-    if exist "%~dp0Core\%CATEGORY%\%MODULE%.ps1" (
-        powershell -ExecutionPolicy Bypass -File "%~dp0Core\%CATEGORY%\%MODULE%.ps1"
+    if exist "%~dp0Core\%MODULE%.ps1" (
+        powershell -ExecutionPolicy Bypass -File "%~dp0Core\%MODULE%.ps1"
     ) else (
         echo [錯誤] PowerShell 模塊不存在：%MODULE%.ps1
     )
 ) else (
-    if exist "%~dp0Batch\%MODULE%.bat" (
-        call "%~dp0Batch\%MODULE%.bat"
+    if exist "%~dp0Core\%MODULE%.bat" (
+        call "%~dp0Core\%MODULE%.bat"
     ) else (
         echo [錯誤] 批次檔模塊不存在：%MODULE%.bat
     )

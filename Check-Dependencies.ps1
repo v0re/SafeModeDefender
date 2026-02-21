@@ -1,4 +1,4 @@
-<#
+﻿<#
 .SYNOPSIS
     SafeModeDefender 依賴檢查和環境修復工具
 

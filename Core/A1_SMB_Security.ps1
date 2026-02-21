@@ -1,4 +1,4 @@
-<#
+﻿<#
 .SYNOPSIS
     A1_SMB_Security - SMB 服務安全強化模塊
     此腳本旨在強化 Windows 系統的 SMB 服務安全性，防範常見的 SMB 相關攻擊。

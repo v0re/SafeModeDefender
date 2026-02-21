@@ -66,6 +66,22 @@ SafeModeDefender v2.2 引入了完整的離線部署支援，確保在沒有網�
 2.  **解壓縮**：將下載的 ZIP 檔案解壓縮到一個方便存取的位置，例如 `C:\Tools\SafeModeDefender`。
 3.  **執行**：右鍵點擊 `SafeModeDefender.bat`，選擇「以管理員身份執行」。
 
+### 免安裝 Git 的快速下載
+
+如果您的設備沒有安裝 Git，可以直接透過瀏覽器下載 ZIP 壓縮檔：
+
+| 版本 | 下載連結 | 說明 |
+|------|----------|------|
+| **主分支（穩定版）** | [📦 下載 ZIP](https://github.com/v0re/SafeModeDefender/archive/refs/heads/main.zip) | 最新穩定版本 |
+| **含 .bat 批次檔版本** | [📦 下載 ZIP](https://github.com/v0re/SafeModeDefender/archive/refs/heads/copilot/create-bat-files-from-ps1.zip) | 包含所有 .ps1 對應的 .bat 自包含批次檔 |
+
+**下載後使用方式：**
+
+1. 點擊上方連結，瀏覽器會自動下載 `.zip` 檔案
+2. 解壓縮到任意資料夾，例如 `C:\Tools\SafeModeDefender`
+3. 右鍵點擊 `SafeModeDefender.bat` → 選擇「以管理員身份執行」
+4. 各模組也可單獨執行：直接雙擊 `Core\` 資料夾中任一 `.bat` 檔案即可
+
 **強烈建議**：為了獲得最佳的清理效果和避免惡意軟體干擾，請在 **Windows 安全模式**下執行此工具。
 
 > **如何進入安全模式**：

@@ -1,4 +1,4 @@
-# encoding: utf-8
+﻿# encoding: utf-8
 <#
 .SYNOPSIS
     B1_UAC_Hardening - UAC 強化與繞過防護模塊

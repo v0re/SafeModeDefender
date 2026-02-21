@@ -1,4 +1,4 @@
-
+﻿
 <#
 .SYNOPSIS
     E2_Terminal_Fix - 終端亂碼與記憶體溢出修復模塊
