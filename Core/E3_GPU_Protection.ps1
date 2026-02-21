@@ -1,4 +1,4 @@
-# encoding: utf-8
+﻿# encoding: utf-8
 <#
 .SYNOPSIS
     E3_GPU_Protection - 顯示卡渲染溢出防護模塊

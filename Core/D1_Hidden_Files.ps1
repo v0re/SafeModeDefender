@@ -1,4 +1,4 @@
-<#
+﻿<#
 .SYNOPSIS
     D1_Hidden_Files - 隱藏檔案與 ADS 掃描模塊
     掃描指定路徑下的隱藏檔案和 NTFS 替代資料流 (ADS)。

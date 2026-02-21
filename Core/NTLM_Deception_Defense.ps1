@@ -1,4 +1,4 @@
-<#
+﻿<#
 .SYNOPSIS
     NTLM_Deception_Defense - NTLM 欺騙式防禦模組
     此腳本實現 NTLM 佔位符防禦機制，將 NTLM 請求重定向到安全的替代方案，使攻擊者的 NTLM 攻擊失效。

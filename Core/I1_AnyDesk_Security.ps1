@@ -1,4 +1,4 @@
-#encoding: utf-8-with-bom
+﻿#encoding: utf-8-with-bom
 <#
 .SYNOPSIS
     I1_AnyDesk_Security - AnyDesk 遠端桌面安全檢測與防護模塊
