@@ -1,4 +1,4 @@
-<#
+﻿<#
 .SYNOPSIS
     I1_Firewall_Optimizer - 交互式防火牆優化工具
 
