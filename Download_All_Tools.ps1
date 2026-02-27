@@ -1,9 +1,9 @@
 ﻿<#
 .SYNOPSIS
-    一鍵下載所有外部工具
+    提供所有外部工具下載連結
 
 .DESCRIPTION
-    自動下載 SafeModeDefender 所需的所有外部工具
+    提供 SafeModeDefender 所需的所有外部工具的官方下載連結
     包括：ClamAV, WinUtil, TestDisk, Optimizer, simplewall, PrivescCheck
     
 .NOTES
@@ -25,7 +25,7 @@ if (-not (Test-Path $DownloadDir)) {
 }
 
 Write-Host "╔══════════════════════════════════════════════════════════════════════════╗" -ForegroundColor Cyan
-Write-Host "║                    一鍵下載所有外部工具                                 ║" -ForegroundColor Cyan
+Write-Host "║                  提供所有外部工具下載連結                               ║" -ForegroundColor Cyan
 Write-Host "╚══════════════════════════════════════════════════════════════════════════╝" -ForegroundColor Cyan
 Write-Host ""
 
@@ -69,8 +69,8 @@ $tools = @(
     }
 )
 
-# 下載函數
-function Download-Tool {
+# 提供下載連結
+function Show-ToolLink {
     param(
         [string]$Name,
         [string]$Url,
@@ -82,49 +82,28 @@ function Download-Tool {
     
     Write-Host "[$Name]" -ForegroundColor Yellow
     Write-Host "  描述: $Description" -ForegroundColor Gray
-    Write-Host "  下載中..." -ForegroundColor Gray -NoNewline
     
-    try {
-        # 檢查檔案是否已存在
-        if (Test-Path $FilePath) {
-            Write-Host " [已存在，跳過]" -ForegroundColor Green
-            return $true
-        }
-        
-        # 下載檔案
-        $ProgressPreference = 'SilentlyContinue'
-        Invoke-WebRequest -Uri $Url -OutFile $FilePath -UseBasicParsing -ErrorAction Stop
-        $ProgressPreference = 'Continue'
-        
-        # 驗證檔案大小
-        $FileSize = (Get-Item $FilePath).Length
-        if ($FileSize -gt 0) {
-            $FileSizeMB = [math]::Round($FileSize / 1MB, 2)
-            Write-Host " [完成] ($FileSizeMB MB)" -ForegroundColor Green
-            return $true
-        } else {
-            Write-Host " [失敗：檔案大小為 0]" -ForegroundColor Red
-            Remove-Item $FilePath -Force -ErrorAction SilentlyContinue
-            return $false
-        }
+    if (Test-Path $FilePath) {
+        Write-Host "  狀態: [已存在]" -ForegroundColor Green
+        return $true
     }
-    catch {
-        Write-Host " [失敗]" -ForegroundColor Red
-        Write-Host "  錯誤: $($_.Exception.Message)" -ForegroundColor Red
-        return $false
-    }
+    
+    Write-Host "  下載連結: $Url" -ForegroundColor Cyan
+    Write-Host "  放置路徑: $FilePath" -ForegroundColor Gray
+    
+    return $false
 }
 
-# 開始下載
-$successCount = 0
-$failCount = 0
+# 顯示所有工具下載連結
+$existCount = 0
+$pendingUrls = @()
 
 foreach ($tool in $tools) {
-    $result = Download-Tool -Name $tool.Name -Url $tool.Url -FileName $tool.FileName -Description $tool.Description
+    $result = Show-ToolLink -Name $tool.Name -Url $tool.Url -FileName $tool.FileName -Description $tool.Description
     if ($result) {
-        $successCount++
+        $existCount++
     } else {
-        $failCount++
+        $pendingUrls += $tool.Url
     }
     Write-Host ""
 }
@@ -132,41 +111,25 @@ foreach ($tool in $tools) {
 # 顯示結果
 Write-Host "══════════════════════════════════════════════════════════════════════════" -ForegroundColor Cyan
 Write-Host ""
-Write-Host "下載完成！" -ForegroundColor Green
-Write-Host "  成功: $successCount" -ForegroundColor Green
-Write-Host "  失敗: $failCount" -ForegroundColor $(if ($failCount -gt 0) { "Red" } else { "Green" })
-Write-Host "  目錄: $DownloadDir" -ForegroundColor Cyan
+Write-Host "連結提供完成！" -ForegroundColor Green
+Write-Host "  已存在: $existCount" -ForegroundColor Green
+Write-Host "  待下載: $($pendingUrls.Count)" -ForegroundColor $(if ($pendingUrls.Count -gt 0) { "Yellow" } else { "Green" })
+Write-Host "  放置目錄: $DownloadDir" -ForegroundColor Cyan
 Write-Host ""
 
-# 解壓縮 ZIP 檔案
-Write-Host "是否要自動解壓縮 ZIP 檔案？(Y/N)" -ForegroundColor Yellow -NoNewline
-$response = Read-Host " "
-
-if ($response -eq 'Y' -or $response -eq 'y') {
+if ($pendingUrls.Count -gt 0) {
+    Write-Host "請手動下載上述工具並放置到對應的放置路徑，然後即可在 SafeModeDefender 中使用。" -ForegroundColor Yellow
     Write-Host ""
-    Write-Host "解壓縮中..." -ForegroundColor Cyan
-    
-    $zipFiles = Get-ChildItem -Path $DownloadDir -Filter "*.zip"
-    foreach ($zipFile in $zipFiles) {
-        $extractPath = Join-Path $DownloadDir $zipFile.BaseName
-        
-        if (-not (Test-Path $extractPath)) {
-            Write-Host "  解壓縮: $($zipFile.Name)..." -ForegroundColor Gray -NoNewline
-            try {
-                Expand-Archive -Path $zipFile.FullName -DestinationPath $extractPath -Force
-                Write-Host " [完成]" -ForegroundColor Green
-            }
-            catch {
-                Write-Host " [失敗]" -ForegroundColor Red
-            }
-        } else {
-            Write-Host "  $($zipFile.Name) [已解壓縮，跳過]" -ForegroundColor Green
+    $openAll = Read-Host "是否在瀏覽器中開啟所有待下載工具的頁面？(Y/N)"
+    if ($openAll -eq 'Y' -or $openAll -eq 'y') {
+        foreach ($url in $pendingUrls) {
+            Start-Process $url
+            Start-Sleep -Milliseconds 500
         }
+        Write-Host "[資訊] 已在瀏覽器中開啟所有下載頁面" -ForegroundColor Green
     }
 }
 
 Write-Host ""
 Write-Host "══════════════════════════════════════════════════════════════════════════" -ForegroundColor Cyan
-Write-Host ""
-Write-Host "所有工具已準備就緒！您現在可以離線使用 SafeModeDefender。" -ForegroundColor Green
 Write-Host ""

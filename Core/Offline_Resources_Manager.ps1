@@ -238,7 +238,7 @@ function Show-AllResourcesStatus {
     }
 }
 
-# 下載單一資源
+# 提供資源下載連結
 function Download-Resource {
     param(
         [string]$ResourceKey,
@@ -247,12 +247,6 @@ function Download-Resource {
     
     $resource = $OfflineResources[$ResourceKey]
     $localPath = $resource.LocalPath
-    
-    # 檢查網路
-    if (-not (Test-NetworkConnection)) {
-        Write-Host "[錯誤] 無網路連線，無法下載資源" -ForegroundColor Red
-        return $false
-    }
     
     # 檢查是否需要更新
     $status = Get-ResourceStatus -ResourceKey $ResourceKey
@@ -266,32 +260,25 @@ function Download-Resource {
         New-Item -ItemType Directory -Path $localPath -Force | Out-Null
     }
     
-    Write-Host "`n[資訊] 正在下載 $($resource.Name)..." -ForegroundColor Cyan
+    Write-Host "`n[資訊] $($resource.Name) 下載連結：" -ForegroundColor Cyan
     
-    $success = $true
     foreach ($file in $resource.Files) {
         $filePath = Join-Path $localPath $file.Name
         
-        Write-Host "  下載：$($file.Name) ($($file.Size))" -ForegroundColor Gray
+        Write-Host "  檔案：$($file.Name) ($($file.Size))" -ForegroundColor Gray
+        Write-Host "  下載連結：$($file.URL)" -ForegroundColor Yellow
+        Write-Host "  放置路徑：$filePath" -ForegroundColor Gray
+        Write-Host ""
         
-        try {
-            Invoke-WebRequest -Uri $file.URL -OutFile $filePath -UseBasicParsing -ErrorAction Stop
-            Write-Host "  ✓ 完成" -ForegroundColor Green
-        }
-        catch {
-            Write-Host "  ✗ 失敗：$($_.Exception.Message)" -ForegroundColor Red
-            $success = $false
+        $open = Read-Host "  是否在瀏覽器中開啟此下載連結？(Y/N)"
+        if ($open -eq 'Y' -or $open -eq 'y') {
+            Start-Process $file.URL
         }
     }
     
-    if ($success) {
-        Write-Host "`n[成功] $($resource.Name) 下載完成！" -ForegroundColor Green
-    }
-    else {
-        Write-Host "`n[警告] $($resource.Name) 部分檔案下載失敗" -ForegroundColor Yellow
-    }
+    Write-Host "`n[資訊] 請手動下載上述檔案並放置到指定路徑後重新執行" -ForegroundColor Yellow
     
-    return $success
+    return $false
 }
 
 # 更新所有資源
@@ -299,30 +286,25 @@ function Update-AllResources {
     param([switch]$Force)
     
     Write-Host "`n╔══════════════════════════════════════════════════════════════════════════╗" -ForegroundColor Cyan
-    Write-Host "║                      更新離線資源                                        ║" -ForegroundColor Cyan
+    Write-Host "║                    提供離線資源下載連結                                   ║" -ForegroundColor Cyan
     Write-Host "╚══════════════════════════════════════════════════════════════════════════╝`n" -ForegroundColor Cyan
     
-    # 檢查網路
-    if (-not (Test-NetworkConnection)) {
-        Write-Host "[錯誤] 無網路連線，無法更新資源" -ForegroundColor Red
-        Write-Host "[提示] 請在有網路的環境下執行更新，或使用含網路功能的安全模式" -ForegroundColor Yellow
-        return
-    }
+    # 移除自動下載功能，改為提供下載連結（Test-NetworkConnection 仍用於狀態顯示）
     
     $totalSuccess = 0
-    $totalFail = 0
+    $totalPending = 0
     
     foreach ($key in $OfflineResources.Keys | Sort-Object) {
         if (Download-Resource -ResourceKey $key -Force:$Force) {
             $totalSuccess++
         }
         else {
-            $totalFail++
+            $totalPending++
         }
     }
     
     Write-Host "`n══════════════════════════════════════════════════════════════════════════" -ForegroundColor Cyan
-    Write-Host "更新完成：成功 $totalSuccess 個，失敗 $totalFail 個" -ForegroundColor $(if ($totalFail -eq 0) { 'Green' } else { 'Yellow' })
+    Write-Host "連結提供完成：已存在 $totalSuccess 個，待下載 $totalPending 個" -ForegroundColor $(if ($totalPending -eq 0) { 'Green' } else { 'Yellow' })
     Write-Host "══════════════════════════════════════════════════════════════════════════`n" -ForegroundColor Cyan
 }
 
@@ -339,8 +321,8 @@ else {
     
     if (-not $CLI) {
         Write-Host "請選擇操作：" -ForegroundColor Cyan
-        Write-Host "  [U] 更新所有資源" -ForegroundColor Yellow
-        Write-Host "  [F] 強制更新所有資源（覆蓋現有檔案）" -ForegroundColor Yellow
+        Write-Host "  [U] 取得缺少或過期資源的下載連結" -ForegroundColor Yellow
+        Write-Host "  [F] 取得所有資源下載連結（包含已存在的檔案）" -ForegroundColor Yellow
         Write-Host "  [Q] 退出" -ForegroundColor Gray
         Write-Host ""
         

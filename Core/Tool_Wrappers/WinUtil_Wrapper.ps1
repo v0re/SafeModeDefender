@@ -58,29 +58,27 @@ function Show-ToolInfo {
     Write-Host ""
 }
 
-# 下載工具
+# 提供工具下載連結
 function Download-WinUtil {
-    Write-Host "[資訊] 正在下載 WinUtil..." -ForegroundColor Cyan
+    $downloadUrl = "https://raw.githubusercontent.com/ChrisTitusTech/winutil/main/winutil.ps1"
     
-    try {
-        # 創建目錄
-        if (-not (Test-Path $WinUtilDir)) {
-            New-Item -ItemType Directory -Path $WinUtilDir -Force | Out-Null
-        }
-        
-        # 下載最新版本的腳本
-        $downloadUrl = "https://raw.githubusercontent.com/ChrisTitusTech/winutil/main/winutil.ps1"
-        
-        Write-Host "[資訊] 下載來源：$downloadUrl" -ForegroundColor Gray
-        Invoke-WebRequest -Uri $downloadUrl -OutFile $WinUtilScript -UseBasicParsing
-        
-        Write-Host "[成功] WinUtil 下載完成！" -ForegroundColor Green
-        return $true
+    Write-Host ""
+    Write-Host "[資訊] 請手動下載 WinUtil" -ForegroundColor Cyan
+    Write-Host "  直接下載：$downloadUrl" -ForegroundColor Yellow
+    Write-Host "  GitHub：$($ToolInfo.GitHub)" -ForegroundColor Yellow
+    Write-Host "  下載後請將 winutil.ps1 放置到：$WinUtilDir" -ForegroundColor Gray
+    Write-Host ""
+    
+    if (-not (Test-Path $WinUtilDir)) {
+        New-Item -ItemType Directory -Path $WinUtilDir -Force | Out-Null
     }
-    catch {
-        Write-Host "[錯誤] 下載失敗：$($_.Exception.Message)" -ForegroundColor Red
-        return $false
+    
+    $open = Read-Host "是否在瀏覽器中開啟下載頁面？(Y/N)"
+    if ($open -eq 'Y' -or $open -eq 'y') {
+        Start-Process $ToolInfo.GitHub
     }
+    
+    return $false
 }
 
 # 檢查工具是否已安裝
@@ -98,7 +96,7 @@ function Install-WinUtil {
     Write-Host "[警告] WinUtil 尚未安裝" -ForegroundColor Yellow
     
     if (-not $Silent) {
-        $install = Read-Host "是否立即下載並安裝？(Y/N)"
+        $install = Read-Host "是否在瀏覽器中開啟下載頁面？(Y/N)"
         if ($install -ne 'Y' -and $install -ne 'y') {
             return $false
         }
@@ -189,8 +187,8 @@ function Invoke-WinUtil {
 Show-ToolInfo
 
 if (-not (Install-WinUtil)) {
-    Write-Host "[錯誤] 無法安裝 WinUtil" -ForegroundColor Red
-    exit 1
+    Write-Host "[資訊] 請下載 WinUtil 並放置到指定目錄後重新執行" -ForegroundColor Yellow
+    exit 0
 }
 
 if ($CLI) {

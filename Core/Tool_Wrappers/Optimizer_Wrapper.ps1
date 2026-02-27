@@ -50,25 +50,25 @@ function Show-ToolInfo {
     Write-Host ""
 }
 
-# 下載工具
+# 提供工具下載連結
 function Download-Optimizer {
-    Write-Host "[資訊] 正在下載 Optimizer..." -ForegroundColor Cyan
+    Write-Host ""
+    Write-Host "[資訊] 請手動下載 Optimizer" -ForegroundColor Cyan
+    Write-Host "  下載連結：$DownloadURL" -ForegroundColor Yellow
+    Write-Host "  GitHub：$($ToolInfo.GitHub)" -ForegroundColor Yellow
+    Write-Host "  下載後請將 Optimizer.exe 放置到：$OptimizerDir" -ForegroundColor Gray
+    Write-Host ""
     
-    try {
-        if (-not (Test-Path $OptimizerDir)) {
-            New-Item -ItemType Directory -Path $OptimizerDir -Force | Out-Null
-        }
-        
-        Write-Host "[資訊] 下載來源：$DownloadURL" -ForegroundColor Gray
-        Invoke-WebRequest -Uri $DownloadURL -OutFile $OptimizerExe -UseBasicParsing
-        
-        Write-Host "[成功] Optimizer 下載完成！" -ForegroundColor Green
-        return $true
+    if (-not (Test-Path $OptimizerDir)) {
+        New-Item -ItemType Directory -Path $OptimizerDir -Force | Out-Null
     }
-    catch {
-        Write-Host "[錯誤] 下載失敗：$($_.Exception.Message)" -ForegroundColor Red
-        return $false
+    
+    $open = Read-Host "是否在瀏覽器中開啟下載頁面？(Y/N)"
+    if ($open -eq 'Y' -or $open -eq 'y') {
+        Start-Process $ToolInfo.GitHub
     }
+    
+    return $false
 }
 
 # 檢查工具是否已安裝
@@ -86,7 +86,7 @@ function Install-Optimizer {
     Write-Host "[警告] Optimizer 尚未安裝" -ForegroundColor Yellow
     
     if (-not $Silent) {
-        $install = Read-Host "是否立即下載並安裝？(Y/N)"
+        $install = Read-Host "是否在瀏覽器中開啟下載頁面？(Y/N)"
         if ($install -ne 'Y' -and $install -ne 'y') {
             return $false
         }
@@ -180,8 +180,8 @@ function Invoke-Optimizer {
 Show-ToolInfo
 
 if (-not (Install-Optimizer)) {
-    Write-Host "[錯誤] 無法安裝 Optimizer" -ForegroundColor Red
-    exit 1
+    Write-Host "[資訊] 請下載 Optimizer 並放置到指定目錄後重新執行" -ForegroundColor Yellow
+    exit 0
 }
 
 if ($CLI) {
