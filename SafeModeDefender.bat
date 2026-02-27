@@ -126,6 +126,8 @@ if "%SUBCHOICE%"=="4" call :RUN_MODULE "NetworkSecurity" "A4_mDNS_Disable"
 if "%SUBCHOICE%"=="5" call :RUN_MODULE "NetworkSecurity" "A5_WinRM_Security"
 if "%SUBCHOICE%"=="6" call :RUN_MODULE "NetworkSecurity" "A6_LLMNR_Disable"
 if "%SUBCHOICE%"=="7" call :RUN_MODULE "NetworkSecurity" "A7_Port_Scanner"
+if "%SUBCHOICE%"=="8" call :RUN_MODULE "NetworkSecurity" "A8_Advanced_Port_Detection"
+if "%SUBCHOICE%"=="9" call :RUN_MODULE "NetworkSecurity" "A9_Process_Behavior_Analysis"
 if /i "%SUBCHOICE%"=="A" call :RUN_CATEGORY "NetworkSecurity"
 if /i "%SUBCHOICE%"=="B" goto MAIN_MENU
 
@@ -138,10 +140,10 @@ powershell -ExecutionPolicy Bypass -NoProfile -File "%~dp0Core\Show-Menu.ps1" -M
 set /p SUBCHOICE=
 
 if "%SUBCHOICE%"=="1" call :RUN_MODULE "PrivilegeEscalation" "B1_UAC_Hardening"
-if "%SUBCHOICE%"=="2" call :RUN_MODULE "PrivilegeEscalation" "B2_Admin_Audit"
-if "%SUBCHOICE%"=="3" call :RUN_MODULE "PrivilegeEscalation" "B3_Token_Detection"
-if "%SUBCHOICE%"=="4" call :RUN_MODULE "PrivilegeEscalation" "B4_Task_Permissions"
-if "%SUBCHOICE%"=="5" call :RUN_MODULE "PrivilegeEscalation" "B5_Service_Audit"
+if "%SUBCHOICE%"=="2" call :RUN_MODULE "PrivilegeEscalation" "B2_SYSTEM_Audit"
+if "%SUBCHOICE%"=="3" call :RUN_MODULE "PrivilegeEscalation" "B3_Token_Protection"
+if "%SUBCHOICE%"=="4" call :RUN_MODULE "PrivilegeEscalation" "B4_Service_Security"
+if "%SUBCHOICE%"=="5" call :RUN_MODULE "PrivilegeEscalation" "B5_ScheduledTask_Audit"
 if /i "%SUBCHOICE%"=="A" call :RUN_CATEGORY "PrivilegeEscalation"
 if /i "%SUBCHOICE%"=="B" goto MAIN_MENU
 
@@ -153,10 +155,10 @@ cls
 powershell -ExecutionPolicy Bypass -NoProfile -File "%~dp0Core\Show-Menu.ps1" -MenuName "MenuC"
 set /p SUBCHOICE=
 
-if "%SUBCHOICE%"=="1" call :RUN_MODULE "RegistryPersistence" "C1_Run_Keys"
-if "%SUBCHOICE%"=="2" call :RUN_MODULE "RegistryPersistence" "C2_Service_Registry"
-if "%SUBCHOICE%"=="3" call :RUN_MODULE "RegistryPersistence" "C3_WMI_Events"
-if "%SUBCHOICE%"=="4" call :RUN_MODULE "RegistryPersistence" "C4_Startup_Folders"
+if "%SUBCHOICE%"=="1" call :RUN_MODULE "RegistryPersistence" "C1_Autorun_Scanner"
+if "%SUBCHOICE%"=="2" call :RUN_MODULE "RegistryPersistence" "C2_Registry_Hijack"
+if "%SUBCHOICE%"=="3" call :RUN_MODULE "RegistryPersistence" "C3_Registry_Permissions"
+if "%SUBCHOICE%"=="4" call :RUN_MODULE "RegistryPersistence" "C4_WMI_Events"
 if /i "%SUBCHOICE%"=="A" call :RUN_CATEGORY "RegistryPersistence"
 if /i "%SUBCHOICE%"=="B" goto MAIN_MENU
 
@@ -169,9 +171,9 @@ powershell -ExecutionPolicy Bypass -NoProfile -File "%~dp0Core\Show-Menu.ps1" -M
 set /p SUBCHOICE=
 
 if "%SUBCHOICE%"=="1" call :RUN_MODULE "FileSystem" "D1_Hidden_Files"
-if "%SUBCHOICE%"=="2" call :RUN_MODULE "FileSystem" "D2_System_Directory"
-if "%SUBCHOICE%"=="3" call :RUN_MODULE "FileSystem" "D3_Temp_Cleanup"
-if "%SUBCHOICE%"=="4" call :RUN_MODULE "FileSystem" "D4_Suspicious_DLL"
+if "%SUBCHOICE%"=="2" call :RUN_MODULE "FileSystem" "D2_INI_Scanner"
+if "%SUBCHOICE%"=="3" call :RUN_MODULE "FileSystem" "D3_File_Permissions"
+if "%SUBCHOICE%"=="4" call :RUN_MODULE "FileSystem" "D4_Digital_Signature"
 if /i "%SUBCHOICE%"=="A" call :RUN_CATEGORY "FileSystem"
 if /i "%SUBCHOICE%"=="B" goto MAIN_MENU
 
@@ -183,9 +185,9 @@ cls
 powershell -ExecutionPolicy Bypass -NoProfile -File "%~dp0Core\Show-Menu.ps1" -MenuName "MenuE"
 set /p SUBCHOICE=
 
-if "%SUBCHOICE%"=="1" call :RUN_MODULE "MemoryProtection" "E1_DEP_ASLR"
-if "%SUBCHOICE%"=="2" call :RUN_MODULE "MemoryProtection" "E2_Process_Detection"
-if "%SUBCHOICE%"=="3" call :RUN_MODULE "MemoryProtection" "E3_Injection_Detection"
+if "%SUBCHOICE%"=="1" call :RUN_MODULE "MemoryProtection" "E1_Memory_Mitigation"
+if "%SUBCHOICE%"=="2" call :RUN_MODULE "MemoryProtection" "E2_Terminal_Fix"
+if "%SUBCHOICE%"=="3" call :RUN_MODULE "MemoryProtection" "E3_GPU_Protection"
 if /i "%SUBCHOICE%"=="A" call :RUN_CATEGORY "MemoryProtection"
 if /i "%SUBCHOICE%"=="B" goto MAIN_MENU
 
@@ -197,8 +199,8 @@ cls
 powershell -ExecutionPolicy Bypass -NoProfile -File "%~dp0Core\Show-Menu.ps1" -MenuName "MenuF"
 set /p SUBCHOICE=
 
-if "%SUBCHOICE%"=="1" call :RUN_MODULE "Privacy" "F1_Telemetry_Disable"
-if "%SUBCHOICE%"=="2" call :RUN_MODULE "Privacy" "F2_Privacy_Hardening"
+if "%SUBCHOICE%"=="1" call :RUN_MODULE "Privacy" "F1_Privacy_Disable"
+if "%SUBCHOICE%"=="2" call :RUN_MODULE "Privacy" "F2_Telemetry_Disable"
 if /i "%SUBCHOICE%"=="A" call :RUN_CATEGORY "Privacy"
 if /i "%SUBCHOICE%"=="B" goto MAIN_MENU
 
@@ -210,9 +212,9 @@ cls
 powershell -ExecutionPolicy Bypass -NoProfile -File "%~dp0Core\Show-Menu.ps1" -MenuName "MenuG"
 set /p SUBCHOICE=
 
-if "%SUBCHOICE%"=="1" call :RUN_MODULE "SystemIntegrity" "G1_File_Integrity"
-if "%SUBCHOICE%"=="2" call :RUN_MODULE "SystemIntegrity" "G2_Windows_Update"
-if "%SUBCHOICE%"=="3" call :RUN_MODULE "SystemIntegrity" "G3_Driver_Verification"
+if "%SUBCHOICE%"=="1" call :RUN_MODULE "SystemIntegrity" "G1_Windows_Update"
+if "%SUBCHOICE%"=="2" call :RUN_MODULE "SystemIntegrity" "G2_System_Integrity"
+if "%SUBCHOICE%"=="3" call :RUN_MODULE "SystemIntegrity" "G3_BIOS_Update"
 if /i "%SUBCHOICE%"=="A" call :RUN_CATEGORY "SystemIntegrity"
 if /i "%SUBCHOICE%"=="B" goto MAIN_MENU
 
@@ -237,9 +239,9 @@ cls
 powershell -ExecutionPolicy Bypass -NoProfile -File "%~dp0Core\Show-Menu.ps1" -MenuName "MenuI"
 set /p SUBCHOICE=
 
-if "%SUBCHOICE%"=="1" call :RUN_MODULE "FirewallPolicy" "I1_Firewall_Rules"
-if "%SUBCHOICE%"=="2" call :RUN_MODULE "FirewallPolicy" "I2_Group_Policy"
-if "%SUBCHOICE%"=="3" call :RUN_MODULE "FirewallPolicy" "I3_Security_Policy"
+if "%SUBCHOICE%"=="1" call :RUN_MODULE "FirewallPolicy" "I1_Firewall_Optimizer"
+if "%SUBCHOICE%"=="2" call :RUN_MODULE "FirewallPolicy" "I2_Security_Policy"
+if "%SUBCHOICE%"=="3" call :RUN_MODULE "FirewallPolicy" "I3_Network_Logon"
 if /i "%SUBCHOICE%"=="A" call :RUN_CATEGORY "FirewallPolicy"
 if /i "%SUBCHOICE%"=="B" goto MAIN_MENU
 

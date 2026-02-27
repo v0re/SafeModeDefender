@@ -98,21 +98,21 @@ function Translate-Text {
     return $Text
 }
 
-# 下載 PrivescCheck
+# 提供工具下載連結
 function Download-PrivescCheck {
-    Write-Host "`n[資訊] 正在下載 $ToolName..." -ForegroundColor Yellow
+    Write-Host ""
+    Write-Host "[資訊] 請手動下載 $ToolName" -ForegroundColor Cyan
+    Write-Host "  GitHub：https://github.com/$GitHubRepo" -ForegroundColor Yellow
+    Write-Host "  直接下載：$DownloadURL" -ForegroundColor Yellow
+    Write-Host "  下載後請將 PrivescCheck.ps1 放置到：$ToolsDir" -ForegroundColor Gray
+    Write-Host ""
     
-    $scriptPath = Join-Path $ToolsDir "PrivescCheck.ps1"
+    $open = Read-Host "是否在瀏覽器中開啟下載頁面？(Y/N)"
+    if ($open -eq 'Y' -or $open -eq 'y') {
+        Start-Process "https://github.com/$GitHubRepo"
+    }
     
-    try {
-        Invoke-WebRequest -Uri $DownloadURL -OutFile $scriptPath -UseBasicParsing
-        Write-Host "[✓] 下載完成" -ForegroundColor Green
-        return $scriptPath
-    }
-    catch {
-        Write-Host "[錯誤] 下載失敗：$($_.Exception.Message)" -ForegroundColor Red
-        return $null
-    }
+    return $null
 }
 
 # 執行 PrivescCheck 並翻譯輸出
@@ -346,7 +346,7 @@ function Main {
         Write-Host "[✓] $ToolName 腳本已存在" -ForegroundColor Green
         
         if (-not $Silent) {
-            $choice = Read-Host "`n是否重新下載最新版本？(Y/N)"
+            $choice = Read-Host "`n是否在瀏覽器中開啟下載頁面取得最新版本？(Y/N)"
             if ($choice -eq "Y" -or $choice -eq "y") {
                 $scriptPath = Download-PrivescCheck
                 if (-not $scriptPath) {

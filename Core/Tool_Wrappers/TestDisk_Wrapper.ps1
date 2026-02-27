@@ -54,39 +54,25 @@ function Show-ToolInfo {
     Write-Host ""
 }
 
-# 下載工具
+# 提供工具下載連結
 function Download-TestDisk {
-    Write-Host "[資訊] 正在下載 TestDisk..." -ForegroundColor Cyan
+    Write-Host ""
+    Write-Host "[資訊] 請手動下載 TestDisk & PhotoRec" -ForegroundColor Cyan
+    Write-Host "  下載連結：$DownloadURL" -ForegroundColor Yellow
+    Write-Host "  官方網站：$($ToolInfo.Website)" -ForegroundColor Yellow
+    Write-Host "  下載後請將壓縮檔解壓縮，並將所有執行檔放置到：$TestDiskDir" -ForegroundColor Gray
+    Write-Host ""
     
-    try {
-        if (-not (Test-Path $TestDiskDir)) {
-            New-Item -ItemType Directory -Path $TestDiskDir -Force | Out-Null
-        }
-        
-        $zipPath = Join-Path $TestDiskDir "testdisk.zip"
-        
-        Write-Host "[資訊] 下載來源：$DownloadURL" -ForegroundColor Gray
-        Invoke-WebRequest -Uri $DownloadURL -OutFile $zipPath -UseBasicParsing
-        
-        Write-Host "[資訊] 正在解壓縮..." -ForegroundColor Cyan
-        Expand-Archive -Path $zipPath -DestinationPath $TestDiskDir -Force
-        
-        # 移動檔案到正確位置
-        $extractedDir = Get-ChildItem -Path $TestDiskDir -Directory | Where-Object { $_.Name -like "testdisk*" } | Select-Object -First 1
-        if ($extractedDir) {
-            Get-ChildItem -Path $extractedDir.FullName | Move-Item -Destination $TestDiskDir -Force
-            Remove-Item -Path $extractedDir.FullName -Recurse -Force
-        }
-        
-        Remove-Item -Path $zipPath -Force
-        
-        Write-Host "[成功] TestDisk 下載完成！" -ForegroundColor Green
-        return $true
+    if (-not (Test-Path $TestDiskDir)) {
+        New-Item -ItemType Directory -Path $TestDiskDir -Force | Out-Null
     }
-    catch {
-        Write-Host "[錯誤] 下載失敗：$($_.Exception.Message)" -ForegroundColor Red
-        return $false
+    
+    $open = Read-Host "是否在瀏覽器中開啟下載頁面？(Y/N)"
+    if ($open -eq 'Y' -or $open -eq 'y') {
+        Start-Process $ToolInfo.Website
     }
+    
+    return $false
 }
 
 # 檢查工具是否已安裝
@@ -104,7 +90,7 @@ function Install-TestDisk {
     Write-Host "[警告] TestDisk 尚未安裝" -ForegroundColor Yellow
     
     if (-not $Silent) {
-        $install = Read-Host "是否立即下載並安裝？(Y/N)"
+        $install = Read-Host "是否在瀏覽器中開啟下載頁面？(Y/N)"
         if ($install -ne 'Y' -and $install -ne 'y') {
             return $false
         }
@@ -256,8 +242,8 @@ function Invoke-TestDisk {
 Show-ToolInfo
 
 if (-not (Install-TestDisk)) {
-    Write-Host "[錯誤] 無法安裝 TestDisk" -ForegroundColor Red
-    exit 1
+    Write-Host "[資訊] 請下載 TestDisk 並放置到指定目錄後重新執行" -ForegroundColor Yellow
+    exit 0
 }
 
 if ($CLI) {

@@ -66,21 +66,19 @@ function Test-ToolInstalled {
     return $null
 }
 
-# 下載工具
+# 提供工具下載連結
 function Download-Tool {
-    Write-Host "`n[資訊] 正在下載 $ToolName..." -ForegroundColor Yellow
+    Write-Host ""
+    Write-Host "[資訊] 請手動下載 $ToolName" -ForegroundColor Cyan
+    Write-Host "  下載連結：$DownloadURL" -ForegroundColor Yellow
+    Write-Host "  GitHub：https://github.com/$GitHubRepo" -ForegroundColor Yellow
+    Write-Host "  下載後請執行安裝程式，或將 simplewall.exe 放置到：$ToolDir" -ForegroundColor Gray
+    Write-Host ""
     
-    $installerPath = Join-Path $ToolDir "simplewall-setup.exe"
+    Start-Process "https://github.com/$GitHubRepo/releases"
+    Write-Host "[資訊] 已在瀏覽器中開啟下載頁面" -ForegroundColor Green
     
-    try {
-        Invoke-WebRequest -Uri $DownloadURL -OutFile $installerPath -UseBasicParsing
-        Write-Host "[✓] 下載完成" -ForegroundColor Green
-        return $installerPath
-    }
-    catch {
-        Write-Host "[錯誤] 下載失敗：$($_.Exception.Message)" -ForegroundColor Red
-        return $null
-    }
+    return $null
 }
 
 # 安裝工具
@@ -140,7 +138,7 @@ function Main {
         Write-Host "[!] $ToolName 尚未安裝" -ForegroundColor Yellow
         
         if (-not $Silent) {
-            $choice = Read-Host "`n是否立即下載並安裝 $ToolName？(Y/N)"
+            $choice = Read-Host "`n是否在瀏覽器中開啟下載頁面？(Y/N)"
             if ($choice -ne "Y" -and $choice -ne "y") {
                 Write-Host "`n[資訊] 已取消安裝" -ForegroundColor Gray
                 return
