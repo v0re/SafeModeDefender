@@ -90,7 +90,7 @@ switch ($MenuName) {
         Write-Host "║                          主選單                                          ║" -ForegroundColor Cyan
         Write-Host "╚$($sep)╝" -ForegroundColor Cyan
         Write-Host ""
-        Write-Host "  [A] 網路服務與端口安全（7 個模塊）"
+        Write-Host "  [A] 網路服務與端口安全（9 個模塊）"
         Write-Host "  [B] 系統權限與提權防護（5 個模塊）"
         Write-Host "  [C] 註冊表與持久化防護（4 個模塊）"
         Write-Host "  [D] 檔案系統與隱藏威脅（4 個模塊）"
@@ -103,7 +103,7 @@ switch ($MenuName) {
         Write-Host "  [T] 外部工具管理器"
         Write-Host "  [O] 離線資源管理"
         Write-Host "  [S] 特殊防護工具（AnyDesk、NTLM、雲端清理）"
-        Write-Host "  [X] 執行完整掃描（所有 33 個模塊）"
+        Write-Host "  [X] 執行完整掃描（所有 35 個模塊）"
         Write-Host "  [R] 查看報告"
         Write-Host "  [Q] 退出"
         Write-Host ""
@@ -129,11 +129,13 @@ switch ($MenuName) {
         Write-Host "  [5] WinRM/PowerShell Remoting 安全"
         Write-Host "  [6] LLMNR/NetBIOS-NS 禁用"
         Write-Host "  [7] 危險端口全面掃描與封鎖"
+        Write-Host "  [8] 增強版服務與端口檢測（雙模式）"
+        Write-Host "  [9] 進程行為模式識別"
         Write-Host ""
         Write-Host "  [A] 執行所有網路安全模塊"
         Write-Host "  [B] 返回主選單"
         Write-Host ""
-        Write-Host "請選擇模塊（1-7, A, B）：" -NoNewline
+        Write-Host "請選擇模塊（1-9, A, B）：" -NoNewline
     }
 
     "MenuB" {
@@ -142,10 +144,10 @@ switch ($MenuName) {
         Write-Host "╚$($sep)╝" -ForegroundColor Cyan
         Write-Host ""
         Write-Host "  [1] UAC 設定強化"
-        Write-Host "  [2] 管理員帳戶審計"
-        Write-Host "  [3] 特權令牌檢測"
-        Write-Host "  [4] 計劃任務權限檢查"
-        Write-Host "  [5] 服務權限審計"
+        Write-Host "  [2] SYSTEM 權限異常檢測"
+        Write-Host "  [3] 特權令牌競取與模擬防護"
+        Write-Host "  [4] 服務安全與 DLL 劫持防護"
+        Write-Host "  [5] 計劃任務安全審計"
         Write-Host ""
         Write-Host "  [A] 執行所有權限防護模塊"
         Write-Host "  [B] 返回主選單"
@@ -158,10 +160,10 @@ switch ($MenuName) {
         Write-Host "║                  註冊表與持久化防護                                      ║" -ForegroundColor Cyan
         Write-Host "╚$($sep)╝" -ForegroundColor Cyan
         Write-Host ""
-        Write-Host "  [1] Run/RunOnce 鍵值檢測"
-        Write-Host "  [2] 服務註冊表檢測"
-        Write-Host "  [3] WMI 事件訂閱檢測"
-        Write-Host "  [4] 啟動資料夾檢測"
+        Write-Host "  [1] 自啟動項全面掃描（Run/RunOnce）"
+        Write-Host "  [2] 註冊表劫持檢測"
+        Write-Host "  [3] 註冊表權限異常檢測"
+        Write-Host "  [4] WMI 事件訂閱檢測"
         Write-Host ""
         Write-Host "  [A] 執行所有持久化防護模塊"
         Write-Host "  [B] 返回主選單"
@@ -175,9 +177,9 @@ switch ($MenuName) {
         Write-Host "╚$($sep)╝" -ForegroundColor Cyan
         Write-Host ""
         Write-Host "  [1] 隱藏檔案與 ADS 檢測"
-        Write-Host "  [2] 系統目錄異常檔案"
-        Write-Host "  [3] Temp 目錄清理"
-        Write-Host "  [4] 可疑 DLL 檢測"
+        Write-Host "  [2] INI 檔案安全掃描"
+        Write-Host "  [3] 檔案權限異常檢測"
+        Write-Host "  [4] 可疑執行檔數位簽章驗證"
         Write-Host ""
         Write-Host "  [A] 執行所有檔案系統模塊"
         Write-Host "  [B] 返回主選單"
@@ -190,9 +192,9 @@ switch ($MenuName) {
         Write-Host "║                  記憶體與漏洞防護                                        ║" -ForegroundColor Cyan
         Write-Host "╚$($sep)╝" -ForegroundColor Cyan
         Write-Host ""
-        Write-Host "  [1] DEP/ASLR 檢查"
-        Write-Host "  [2] 可疑進程檢測"
-        Write-Host "  [3] 注入檢測"
+        Write-Host "  [1] 記憶體溢出漏洞緩解（DEP/ASLR）"
+        Write-Host "  [2] 終端亂碼與記憶體溢出修復"
+        Write-Host "  [3] 顯示卡渲染溢出防護（GPU）"
         Write-Host ""
         Write-Host "  [A] 執行所有記憶體防護模塊"
         Write-Host "  [B] 返回主選單"
@@ -205,8 +207,8 @@ switch ($MenuName) {
         Write-Host "║                  隱私權與遙測                                            ║" -ForegroundColor Cyan
         Write-Host "╚$($sep)╝" -ForegroundColor Cyan
         Write-Host ""
-        Write-Host "  [1] Windows 遙測禁用"
-        Write-Host "  [2] 隱私設定強化"
+        Write-Host "  [1] Windows 隱私權全面關閉"
+        Write-Host "  [2] Windows 遙測與診斷禁用"
         Write-Host ""
         Write-Host "  [A] 執行所有隱私防護模塊"
         Write-Host "  [B] 返回主選單"
@@ -219,9 +221,9 @@ switch ($MenuName) {
         Write-Host "║                  系統完整性與更新                                        ║" -ForegroundColor Cyan
         Write-Host "╚$($sep)╝" -ForegroundColor Cyan
         Write-Host ""
-        Write-Host "  [1] 系統檔案完整性檢查"
-        Write-Host "  [2] Windows Update 檢查"
-        Write-Host "  [3] 驅動程式簽章驗證"
+        Write-Host "  [1] Windows Update 修復與強制啟用"
+        Write-Host "  [2] 系統檔案完整性檢查（SFC/DISM）"
+        Write-Host "  [3] BIOS/UEFI 更新檢測與引導"
         Write-Host ""
         Write-Host "  [A] 執行所有完整性模塊"
         Write-Host "  [B] 返回主選單"
@@ -248,9 +250,9 @@ switch ($MenuName) {
         Write-Host "║                  防火牆與策略                                            ║" -ForegroundColor Cyan
         Write-Host "╚$($sep)╝" -ForegroundColor Cyan
         Write-Host ""
-        Write-Host "  [1] Windows 防火牆規則審計"
-        Write-Host "  [2] 群組原則檢查"
-        Write-Host "  [3] 本地安全原則強化"
+        Write-Host "  [1] 防火牆規則優化工具"
+        Write-Host "  [2] 本機安全策略強化"
+        Write-Host "  [3] 網路登入方式檢查"
         Write-Host ""
         Write-Host "  [A] 執行所有防火牆與策略模塊"
         Write-Host "  [B] 返回主選單"
@@ -300,7 +302,7 @@ switch ($MenuName) {
         Write-Host "║                          完整掃描                                        ║" -ForegroundColor Cyan
         Write-Host "╚$($sep)╝" -ForegroundColor Cyan
         Write-Host ""
-        Write-Host "即將執行所有 33 個安全模塊的完整掃描。"
+        Write-Host "即將執行所有 35 個安全模塊的完整掃描。"
         Write-Host "此過程可能需要 30-60 分鐘，具體取決於您的系統狀態。"
         Write-Host ""
         Write-Host "掃描期間將生成詳細的報告，並在必要時提示您確認修復操作。"
